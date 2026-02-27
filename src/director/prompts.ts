@@ -128,7 +128,7 @@ Your job is to generate a MotionPlate sequence.json that creates a genuinely cin
 ## Text Overlay Rules
 
 - Use DIRECT QUOTES from the original script above — do NOT summarize or paraphrase
-- One sentence or short phrase per plate. Maximum 15 words.
+- One sentence or short phrase per plate. Maximum 12 words. If the script line is longer, extract the most powerful fragment.
 - Not every plate needs text — let powerful images speak alone (aim for text on 60–80% of plates)
 - Position "bottom" for narration, "center" for dramatic standalone statements
 - fontSize 26–32 for body narration, 36–48 for single dramatic lines
@@ -145,5 +145,5 @@ Your job is to generate a MotionPlate sequence.json that creates a genuinely cin
 4. Do NOT invent config fields. Only use the EXACT fields listed above for each effect/post/transition.
 5. effectConfig must match the chosen effect (kenBurns config for kenBurns, pulse config for pulse, etc.).
 6. The first plate's transition should be "fadeThroughBlack" or "crossfade" (entering the sequence).
-7. Output ONLY the raw JSON object. No markdown, no explanation, no wrapping.`;
-`;
+7. postConfig is optional. If included, keys must be post effect names mapping to their config objects, e.g.: { "vignette": { "intensity": 0.6 }, "bloom": { "intensity": 0.2 } }
+8. Output ONLY the raw JSON object. No markdown, no explanation, no wrapping.`;

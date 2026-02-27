@@ -423,13 +423,6 @@ director.ts:96 🎬 [Director] Successfully generated Sequence!
 ![alt text](image-6.png)
 - Poor direction, Opus PoC version with just 3 frames, was another level.
 
-Diagnosis
-1. The prompt teaches schema, not cinema. The PoC was "another level" because Opus made intentional creative choices: negative panX for contemplation, pulse for breathing life, vignette + particles for cosmic dust. Your current prompt lists valid fields but never explains when to use them. Gemini defaults to generic kenBurns because it doesn't know the emotional vocabulary.
-
-2. The ? thumbnails are a data-binding break. The store maps plates → images by position (images[plateIdx]). When handleAccept calls setSpec(), it replaces the 7-plate spec with a 9-plate spec but leaves the 7-image array untouched. Plates 8 and 9 index into undefined.
-
-3. The original script is lost by Call 3. The parser compresses your prose into beat summaries. By the time the director generates the spec, it's working from "mood: intense, nascent" instead of "In the searing aftermath, the first particles emerged." — so text overlays become paraphrases instead of direct quotes.
-
 ### Fix 1 — Cinematography Prompt (biggest impact)
 Full replacement for src/director/prompts.ts:
 
@@ -442,11 +435,17 @@ src/director/adapter.ts — add imageMapping to output
 - src/store/project.ts — add setSpecWithImages
 - src/composer/DirectorPanel.tsx — fix handleAccept
 
+### Fix 4 — Testing & Validation
+Test the director end-to-end with the same script + 7 images. You should see:
+- No ? thumbnails — every plate resolves to an image
+- Varied effects — not all kenBurns; expect pulse, drift, maybe a static
+- Intentional pan directions — negative panX for contemplative beats, positive for forward momentum
+- Direct quotes as text overlays, not summaries
+- Varied durations — 3s to 7s range, not uniform 4-5s 
 
-Then test the director end-to-end with the same script + 7 images. You should see:
-
-No ? thumbnails — every plate resolves to an image
-Varied effects — not all kenBurns; expect pulse, drift, maybe a static
-Intentional pan directions — negative panX for contemplative beats, positive for forward momentum
-Direct quotes as text overlays, not summaries
-Varied durations — 3s to 7s range, not uniform 4-5s
+### Green
+✅ Lint     — 0 errors, 0 warnings
+✅ Types    — clean
+✅ Build    — 361 kB, 1.65s
+✅ Tests    — 76/76 passed
+✅ Director — cinematography-aware, image-bound, retry-validated
