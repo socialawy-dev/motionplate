@@ -22,23 +22,25 @@ export async function directSequence(input: DirectorInput, adapter: LLMAdapter):
     const { mappedBeats } = await mapBeatsToImages(beats, input.images, adapter);
     console.log(`🎬 [Director] Mapped all beats successfully.`);
 
-    // Step 3: Compile final system prompt
-    let systemPrompt = DIRECTOR_SYSTEM_PROMPT.replace('{SCHEMA_PLACEHOLDER}', SCHEMA_STRING);
-    systemPrompt = systemPrompt.replace('{BEATS_PLACEHOLDER}', JSON.stringify(mappedBeats, null, 2));
+    // Step 3: Build the director prompt with full context
+    let systemPrompt = DIRECTOR_SYSTEM_PROMPT
+        .replace('{SCHEMA_PLACEHOLDER}', SCHEMA_STRING)
+        .replace('{BEATS_PLACEHOLDER}', JSON.stringify(mappedBeats, null, 2))
+        .replace('{SCRIPT_PLACEHOLDER}', input.script)
+        .replace('{BEAT_COUNT}', String(mappedBeats.length));
 
     const style = input.style || 'cinematic';
     const styleMap: Record<string, string> = {
-        cinematic: 'Use slow drift, slight ken burns. Prefer crossfades over hard cuts unless tension requires it. Pacing should feel deliberate.',
-        documentary: 'Use more static shots or slow pans. Occasional hard cuts. Focus on the subject.',
-        poetic: 'Use lots of crossfades and slow fades. Drift effects work well. Dreamy pacing.',
-        dramatic: 'High contrast between slow burns and sudden screen shakes or fast cuts when action hits.'
+        cinematic: `Cinematic style. Favor kenBurns with deliberate pan directions matching emotional movement. Use crossfade as default transition. Pacing should feel slow and intentional — 4-7s plates. Layer vignette + bloom or vignette + particles for atmosphere. Vary zoom direction per beat's emotional register.`,
+        documentary: `Documentary style. Favor kenBurns with low endScale (1.05-1.1) and static for key moments. Use crossfade and fadeThroughBlack between sections. Pacing should be observational — 4-6s plates. Keep post effects minimal: vignette on most, fog sparingly. Text should feel like considered narration.`,
+        poetic: `Poetic style. Favor drift and slow pulse effects. Heavy use of crossfade and fadeThroughWhite. Pacing should feel dreamlike — 5-8s plates, longer pauses. Layer vignette + bloom + particles for ethereal atmosphere. Every transition should feel like flowing water. Text overlays should be sparse and powerful.`,
+        dramatic: `Dramatic style. Mix slow kenBurns builds with sudden cuts at emotional peaks. Use fadeThroughBlack between acts and cut for shock moments. Allow one screenShake at the climactic beat. Pacing should contrast — 6s contemplative plates then 2-3s action plates. chromaticAberration on tense moments.`
     };
-    const styleInstruction = styleMap[style] || styleMap.cinematic;
-    systemPrompt = systemPrompt.replace('{STYLE_PLACEHOLDER}', styleInstruction);
+    systemPrompt = systemPrompt.replace('{STYLE_PLACEHOLDER}', styleMap[style] || styleMap.cinematic);
 
     // Step 4: Generate Spec (with Retry Logic)
     console.log(`🎬 [Director] Generating spec sequence...`);
-    const generatePrompt = `Generate the sequence.json now. Remember: The output MUST EXACTLY validate against the provided JSON schema. Output ONLY valid JSON, do not include markdown blocks.`;
+    const generatePrompt = `Generate the sequence.json now. Remember: output EXACTLY ${mappedBeats.length} plates, one per beat. Output ONLY valid JSON, no markdown.`;
 
     let sequenceOutput: Sequence | null = null;
     let fallbackError: string | null = null;
@@ -65,7 +67,7 @@ export async function directSequence(input: DirectorInput, adapter: LLMAdapter):
         fallbackError = errorMessage;
         confidence -= 0.3; // Penalty for retry
 
-        const retryPrompt = `${generatePrompt}\n\nWARNING: Your previous attempt failed with the following errors:\n${errorMessage}\n\nPlease fix these specific errors and output a perfectly valid JSON object matching the exact schema requirements.`;
+        const retryPrompt = `${generatePrompt}\n\nWARNING: Your previous attempt failed with:\n${errorMessage}\n\nFix these errors. Output EXACTLY ${mappedBeats.length} plates. Output valid JSON only.`;
 
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,15 +91,17 @@ export async function directSequence(input: DirectorInput, adapter: LLMAdapter):
         throw new Error("Critical failure: sequenceOutput is null despite no throw.");
     }
 
-    // Step 6: Fixup & Return
-    // Provide some default dummy reasoning if the adapter structure doesn't support reasoning side-channels
-    const reasoning = `Completed generation of ${sequenceOutput.plates.length} plates using ${adapter.name} targeting a '${style}' style. Validation passed. ${fallbackError ? 'Required 1 retry.' : ''}`;
+    // Build image mapping: plates[i] → filename from mappedBeats[i]
+    const imageMapping = mappedBeats.map(b => b.imageFilename);
+
+    const reasoning = `Generated ${sequenceOutput.plates.length} plates using ${adapter.name} in '${style}' style. Validation passed.${fallbackError ? ' Required 1 retry.' : ''}`;
 
     console.log(`🎬 [Director] Successfully generated Sequence!`);
 
     return {
         sequence: sequenceOutput,
         reasoning,
-        confidence
+        confidence,
+        imageMapping,
     };
 }
