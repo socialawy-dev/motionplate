@@ -1,6 +1,10 @@
 export const PARSER_SYSTEM_PROMPT = `You are an expert cinematic director and storyboard artist.
 Your job is to read a script or prose text and break it down into a sequence of distinct visual "beats".
 
+You have {IMAGE_COUNT} available images. Extract AT MOST {IMAGE_COUNT} beats (one per image). 
+If the script has more narrative moments than images, consolidate adjacent moments with similar 
+mood into a single longer beat (6-10 seconds). Quality over quantity.
+
 For each beat, extract or infer:
 1. "text": The EXACT text from the script for this beat — preserve the original wording.
 2. "durationTarget": Suggested duration in seconds (usually 3 to 8 seconds depending on emotional weight).

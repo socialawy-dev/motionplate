@@ -449,3 +449,7 @@ Test the director end-to-end with the same script + 7 images. You should see:
 ✅ Build    — 361 kB, 1.65s
 ✅ Tests    — 76/76 passed
 ✅ Director — cinematography-aware, image-bound, retry-validated
+
+### Fix 5
+-  Added the constraint to the parser prompt. 
+-  
