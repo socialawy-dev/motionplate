@@ -46,4 +46,5 @@ export interface DirectorOutput {
     sequence: Sequence;      // Valid sequence.json spec
     reasoning: string;       // Why the AI made these choices
     confidence: number;      // 0-1 self-assessed quality
+    imageMapping: string[];  // imageMapping[i] = filename for plates[i]
 }

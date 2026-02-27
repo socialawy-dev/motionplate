@@ -43,6 +43,7 @@ interface ProjectState {
 
     // Actions
     setSpec: (spec: Sequence) => void;
+    setSpecWithImages: (spec: Sequence, images: ImageEntry[]) => void;
     addImages: (entries: ImageEntry[]) => void;
     removeImage: (idx: number) => void;
     selectPlate: (idx: number) => void;
@@ -78,6 +79,15 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
     setSpec: (spec) =>
         set((s) => ({ spec, past: pushHistory(s.past, s.spec), future: [] })),
+
+    setSpecWithImages: (spec, images) =>
+        set((s) => ({
+            spec,
+            images,
+            selectedPlateIdx: 0,
+            past: pushHistory(s.past, s.spec),
+            future: [],
+        })),
 
     addImages: (entries) =>
         set((s) => {

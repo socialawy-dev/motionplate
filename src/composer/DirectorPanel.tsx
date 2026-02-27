@@ -10,7 +10,7 @@ import type { DirectorInput, DirectorOutput } from '../director/adapter';
 
 export default function DirectorPanel() {
     const images = useProjectStore((s) => s.images);
-    const setSpec = useProjectStore((s) => s.setSpec);
+    const setSpecWithImages = useProjectStore((s) => s.setSpecWithImages);
     const setActiveMode = useSettingsStore((s) => s.setActiveMode);
 
     const [script, setScript] = useState('');
@@ -84,7 +84,23 @@ export default function DirectorPanel() {
 
     const handleAccept = () => {
         if (result) {
-            setSpec(result.sequence);
+            // Build images array matching plates 1:1 using the director's image mapping
+            if (result.imageMapping && result.imageMapping.length > 0) {
+                const imageByName = new Map<string, typeof images[number]>();
+                for (const img of images) {
+                    imageByName.set(img.file.name, img);
+                }
+
+                const reorderedImages = result.imageMapping.map(filename => {
+                    return imageByName.get(filename) || images[0];
+                });
+
+                setSpecWithImages(result.sequence, reorderedImages);
+            } else {
+                // Fallback: legacy behavior (no mapping available)
+                setSpecWithImages(result.sequence, images);
+            }
+
             setResult(null);
             setActiveMode('compose');
         }
