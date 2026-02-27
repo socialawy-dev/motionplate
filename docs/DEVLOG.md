@@ -184,56 +184,44 @@ Added comprehensive GitHub standards, security policies, and automation workflow
 - [x] P3 gate — load images → compose → preview → export in browser
 
 ```bash
+PS E:\co\MotionPlate> npm run lint
+
+> motionplate-app@0.0.0 lint
+> eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+
+PS E:\co\MotionPlate> npx tsc --noEmit
+PS E:\co\MotionPlate> npm run build   
+
+> motionplate-app@0.0.0 build
+> tsc && vite build
+
+vite v7.3.1 building client environment for production...
+✓ 203 modules transformed.
+dist/index.html                   0.86 kB │ gzip:   0.47 kB
+dist/assets/index-DlVZWlDJ.css    9.66 kB │ gzip:   2.36 kB
+dist/assets/index-WR-rF71W.js   338.38 kB │ gzip: 107.02 kB
+✓ built in 1.44s
+PS E:\co\MotionPlate> npm run test    
+
 > motionplate-app@0.0.0 test
 > vitest
 
 
  DEV  v4.0.18 E:/co/motionplate
 
- ✓ tests/engine/text.test.ts (11 tests) 13ms
- ✓ tests/engine/effects.test.ts (11 tests) 20ms
- ✓ tests/engine/renderer.test.ts (14 tests) 19ms
- ✓ tests/spec/spec.test.ts (24 tests) 12ms
- ✓ src/test/basic.test.ts (1 test) 4ms
+ ✓ tests/engine/text.test.ts (11 tests) 17ms
+ ✓ tests/engine/effects.test.ts (11 tests) 23ms
+ ✓ tests/engine/renderer.test.ts (14 tests) 13ms
+ ✓ tests/spec/spec.test.ts (24 tests) 13ms
+ ✓ src/test/basic.test.ts (1 test) 2ms
  ✓ tests/engine/transitions.test.ts (14 tests) 6ms
 
  Test Files  6 passed (6)
       Tests  75 passed (75)
-   Start at  18:45:22
-   Duration  2.74s (transform 477ms, setup 867ms, import 761ms, tests 74ms, environment 6.04s)
+   Start at  19:00:35
+   Duration  2.40s (transform 349ms, setup 830ms, import 647ms, tests 73ms, environment 5.01s)
 
-vite v7.3.1 building client environment for production...
-✓ 203 modules transformed.
-dist/index.html                   0.86 kB │ gzip:   0.47 kB
-dist/assets/index-DlVZWlDJ.css    9.66 kB │ gzip:   2.36 kB
-dist/assets/index-B4lVc3I4.js   338.38 kB │ gzip: 107.02 kB
-✓ built in 1.55s
-PS E:\co\motionplate> npm run lint
-
-> motionplate-app@0.0.0 lint
-> eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
-
-
-E:\co\motionplate\src\composer\DropZone.tsx
-  32:19  error  'React' is not defined  no-undef
-  43:19  error  'React' is not defined  no-undef
-
-E:\co\motionplate\src\composer\SpecView.tsx
-  17:36  error  'React' is not defined  no-undef
-
-E:\co\motionplate\src\composer\Transport.tsx
-  33:13  error  'React' is not defined  no-undef
-
-E:\co\motionplate\src\engine\transitions\cut.ts
-  7:28  error  '_progress' is defined but never used  @typescript-eslint/no-unused-vars
-
-E:\co\motionplate\src\spec\defaults.ts
-  11:24  error  '_ScreenShakeConfig' is defined but never used  @typescript-eslint/no-unused-vars
-
-E:\co\motionplate\src\test\setup.ts
-  39:32  error  'CanvasTextAlign' is not defined     no-undef
-  40:35  error  'CanvasTextBaseline' is not defined  no-undef
-  41:29  error  'CanvasDirection' is not defined     no-undef
+ PASS  Waiting for file changes...
 ```
 
 ![alt text](image.png)
