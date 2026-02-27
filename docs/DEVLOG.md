@@ -460,4 +460,52 @@ Test the director end-to-end with the same script + 7 images. You should see:
 
 - Step 2: schemas/sequence.schema.json
 Only change is the transition enum — add 4 values
+`wipeLeft` - `wipeDown` - `slideLeft` - `zoomThrough`
 
+- updated the schema version from '1.0.0' to '1.1.0' in defaults.ts.
+
+- updated the test to match the new fallback behavior. The test now verifies that getTransition('unknown') returns the crossfade function (which returns 0 at progress 0 and 1 at progress 1) instead of throwing an error.
+
+```bash
+PS E:\co\MotionPlate> npm run test
+
+> motionplate-app@0.0.0 test
+> vitest
+
+
+ DEV  v4.0.18 E:/co/motionplate
+
+ ✓ tests/engine/text.test.ts (11 tests) 16ms
+ ✓ tests/engine/transitions.test.ts (14 tests) 9ms
+ ✓ tests/engine/effects.test.ts (11 tests) 23ms
+ ✓ tests/engine/renderer.test.ts (14 tests) 16ms
+ ✓ src/test/basic.test.ts (1 test) 2ms
+ ✓ tests/spec/spec.test.ts (24 tests) 14ms
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Starting direction with MockAdapter...
+🎬 [Director] Parsing script...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Extracted 1 beats.
+🎬 [Director] Mapping beats to 1 available images...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Mapped all beats successfully.
+🎬 [Director] Generating spec sequence...
+
+stderr | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+⚠️ [Director] Initial generation failed: Schema validation failed:
+(root): must have required property 'meta'
+(root): must have required property 'plates'
+(root): must NOT have additional properties. Attempting 1 retry...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Successfully generated Sequence!
+
+ ✓ tests/director/director.test.ts (1 test) 6ms
+
+ Test Files  7 passed (7)
+      Tests  76 passed (76)
+   Start at  01:12:12
+   Duration  2.72s (transform 411ms, setup 801ms, import 851ms, tests 85ms, environment 6.19s)
+```

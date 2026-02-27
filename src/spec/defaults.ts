@@ -13,7 +13,7 @@ import type {
 } from './schema';
 
 // Current schema version — bump this on any breaking change to sequence.schema.json
-export const CURRENT_SCHEMA_VERSION = '1.0.0';
+export const CURRENT_SCHEMA_VERSION = '1.1.0';
 
 // ─── Effect defaults ──────────────────────────────────────────────────────────
 

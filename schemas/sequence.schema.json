@@ -103,7 +103,11 @@
                             "crossfade",
                             "fadeThroughBlack",
                             "fadeThroughWhite",
-                            "lightBleed"
+                            "lightBleed",
+                            "wipeLeft",
+                            "wipeDown",
+                            "slideLeft",
+                            "zoomThrough"
                         ]
                     },
                     "transitionDuration": {
