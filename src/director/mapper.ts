@@ -1,4 +1,4 @@
-import { LLMAdapter, Beat, ImageMeta } from './adapter';
+import type { LLMAdapter, Beat, ImageMeta } from './adapter';
 import { MAPPER_SYSTEM_PROMPT } from './prompts';
 
 export interface MappedBeat extends Beat {
@@ -22,12 +22,14 @@ export async function mapBeatsToImages(beats: Beat[], images: ImageMeta[], adapt
     const prompt = `Story Beats:\n${beatsJson}\n\nAvailable Images:\n${imagesJson}\n\nAssign exactly one image to each beat. Return ONLY a JSON array.`;
 
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rawOutput = await adapter.generateJSON<any>(prompt, undefined, {
             systemPrompt: MAPPER_SYSTEM_PROMPT,
             temperature: 0.2
         });
 
         // Fail-fast validation
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let mappingsArray: any[];
 
         if (rawOutput && !Array.isArray(rawOutput) && Array.isArray(rawOutput.assignments)) {
@@ -46,6 +48,7 @@ export async function mapBeatsToImages(beats: Beat[], images: ImageMeta[], adapt
 
         for (let i = 0; i < beats.length; i++) {
             // Find mapping for this beat index
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const mapping = mappingsArray.find((m: any) => m.beatIndex === i);
 
             if (!mapping) {

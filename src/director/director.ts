@@ -1,9 +1,9 @@
-import { LLMAdapter, DirectorInput, DirectorOutput } from './adapter';
+import type { LLMAdapter, DirectorInput, DirectorOutput } from './adapter';
 import { parseScript } from './parser';
 import { mapBeatsToImages } from './mapper';
 import { DIRECTOR_SYSTEM_PROMPT } from './prompts';
 import { validateSequence } from '../spec/validator';
-import { Sequence } from '../spec/schema';
+import type { Sequence } from '../spec/schema';
 import schemaData from '../../schemas/sequence.schema.json';
 
 // We inject the entire JSON Schema as a string into the prompt
@@ -45,6 +45,7 @@ export async function directSequence(input: DirectorInput, adapter: LLMAdapter):
     let confidence = 0.8; // Base guess
 
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rawJsonOutput = await adapter.generateJSON<any>(generatePrompt, undefined, {
             systemPrompt: systemPrompt
         });
@@ -67,6 +68,7 @@ export async function directSequence(input: DirectorInput, adapter: LLMAdapter):
         const retryPrompt = `${generatePrompt}\n\nWARNING: Your previous attempt failed with the following errors:\n${errorMessage}\n\nPlease fix these specific errors and output a perfectly valid JSON object matching the exact schema requirements.`;
 
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const retryJsonOutput = await adapter.generateJSON<any>(retryPrompt, undefined, {
                 systemPrompt: systemPrompt,
                 temperature: 0.1 // Drop temperature further for retry

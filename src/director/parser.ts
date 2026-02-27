@@ -1,4 +1,4 @@
-import { LLMAdapter, Beat } from './adapter';
+import type { LLMAdapter, Beat } from './adapter';
 import { PARSER_SYSTEM_PROMPT } from './prompts';
 
 export interface ParseResult {
@@ -9,12 +9,14 @@ export async function parseScript(script: string, adapter: LLMAdapter): Promise<
     const prompt = `Analyze the following script and break it down into visual beats:\n\n${script}\n\nReturn ONLY a JSON array.`;
 
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rawOutput = await adapter.generateJSON<any>(prompt, undefined, {
             systemPrompt: PARSER_SYSTEM_PROMPT,
             temperature: 0.2
         });
 
         // Fail-fast validation
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let beatsArray: any[];
 
         // Handle case where LLM wraps array in an object: { "beats": [...] }
@@ -26,6 +28,7 @@ export async function parseScript(script: string, adapter: LLMAdapter): Promise<
             throw new Error("Output is not a JSON array.");
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const beats: Beat[] = beatsArray.map((b: any, index: number) => {
             if (typeof b.text !== 'string') {
                 throw new Error(`Beat at index ${index} is missing or has invalid "text" field.`);

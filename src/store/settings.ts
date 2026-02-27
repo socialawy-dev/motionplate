@@ -8,7 +8,7 @@
 import { create } from 'zustand';
 import type { HardwareTier } from '../spec/schema';
 
-type ActiveMode = 'compose' | 'preview' | 'spec';
+type ActiveMode = 'compose' | 'preview' | 'spec' | 'director';
 
 interface SettingsState {
     tier: HardwareTier;
