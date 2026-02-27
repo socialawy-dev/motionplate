@@ -561,3 +561,46 @@ stdout | tests/director/director.test.ts > Director Orchestrator > should succes
  PASS  Waiting for file changes...
        press h to show help, press q to quit
 ```
+#### Fix for renderer.ts
+>  tsc clean, 76/76 passing. The three changes applied:
+
+- **Fix for `renderer.ts`**:
+  1. Import: `TransitionName` added to the type import.
+  2. `applyOverlayTransition`:
+    - Two guards added:
+      - `if (isCompositeTransition(...)) return;` — exits immediately for any composite transition, no IN-zone or OUT-zone overlay applied.
+      - OUT zone now checks `nextPlate?.transition` — if the next plate uses a composite transition, skips the fade-to-black (that plate's transition-IN handles the blend).
+  3. Call site: `nextPlate?.transition` passed in from `spec.plates[plateIdx + 1]`.
+
+### Step 5: src/engine/transitions/crossfade.ts — added composite export
+
+- Updated import to include CompositeTransitionFn type
+- Existing scalar crossfade function (unchanged, maintains backward compatibility)
+- New crossfadeComposite function that implements true dual-image blending:
+  - Draws outgoing plate at full alpha
+  - Draws incoming plate with progress-based alpha
+  - Restores globalAlpha to 1
+
+### Step 6: Three spatial transitions
+src/engine/transitions/wipeLeft.ts — NEW
+src/engine/transitions/wipeDown.ts — NEW
+src/engine/transitions/slideLeft.ts — NEW
+
+ Remaining Steps (7–11)
+
+  ┌──────┬──────────────────────────────────────┬────────────────────────┐   
+  │ Step │                 File                 │         Status         │   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤      
+  │ 7    │ zoomThrough.ts                       │ Not created            │   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  │      │ transitions/index.ts — wire real fns │ Stubs in place, real   │   
+  │ 8    │  into composite registry             │ wiring pending steps   │   
+  │      │                                      │ 5–7                    │   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  │ 9    │ prompts.ts — director guide          │ Not done               │   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  │ 10   │ Tests                                │ Not done               │   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  │ 11   │ Lint + build + gate                  │ Not done               │
+  └──────┴──────────────────────────────────────┴────────────────────────┘
+
