@@ -360,5 +360,36 @@ PS E:\co\motionplate> npm run dev
   ➜  Network: use --host to expose
   ➜  press h + enter to show help
   ```
-  ![alt text](image-1.png)
-  ![alt text](image-2.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+---
+
+## Phase 4.5: Fixes - Gemini Adapter
+
+Applied all three fixes as requested:
+
+- Model Update: Changed the Gemini model from gemini-2.5-flash to gemini-3.0-flash in gemini.ts.
+- Explicit Config Shapes: Added the detailed valid effect configs, post effects, transitions, and text configs to the DIRECTOR_SYSTEM_PROMPT in prompts.ts, along with the instruction to limit text overlays to 15 words.
+- Token Limit Increase: Bumped maxOutputTokens from 8192 to 16384 in gemini.ts.
+
+### Tested with a fewer lines
+```
+client:733 [vite] connecting...
+client:827 [vite] connected.
+(index):1 [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) <input placeholder=​"AIzaSy..." type=​"password" value style=​"width:​ 100%;​ padding:​ 0.5rem;​ background:​ rgb(28, 28, 28)​;​ border:​ 1px solid rgb(51, 51, 51)​;​ color:​ rgb(255, 255, 255)​;​ border-radius:​ 4px;​">​
+director.ts:13 🎬 [Director] Starting direction with Gemini...
+director.ts:16 🎬 [Director] Parsing script...
+director.ts:18 🎬 [Director] Extracted 9 beats.
+director.ts:21 🎬 [Director] Mapping beats to 7 available images...
+director.ts:23 🎬 [Director] Mapped all beats successfully.
+director.ts:40 🎬 [Director] Generating spec sequence...
+director.ts:96 🎬 [Director] Successfully generated Sequence!
+
+```
+![alt text](image-4.png)
+
+Switched to editro without applying, directore resets
+![alt text](image-5.png)
+

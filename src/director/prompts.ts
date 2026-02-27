@@ -66,6 +66,26 @@ Your tasks:
 3. Construct the 'plates' array. Each beat becomes one or more plates.
 4. Assign appropriate 'effect' and 'post' treatments based on the defined mood and camera suggestions for that beat.
 5. Apply 'transition' between plates to match the narrative continuity.
+6. Keep text overlays to ONE short sentence maximum per plate. 15 words or fewer.
+
+# VALID EFFECT CONFIGS (use ONLY these fields)
+
+kenBurns: { startScale?: number (default 1.0), endScale?: number (default 1.15), panX?: number -0.1 to 0.1 (default 0.02), panY?: number -0.1 to 0.1 (default 0.01), anchor?: "center" | "topLeft" }
+pulse: { frequency?: number (default 2), amplitude?: number 0.01-0.05 (default 0.02) }
+rotate: { maxAngle?: number in degrees (default 2) }
+drift: {} (no config needed, uses built-in sinusoidal)
+static: {} (no config needed)
+
+# VALID POST EFFECT NAMES (array of strings)
+"vignette", "bloom", "particles", "fog", "chromaticAberration", "screenShake"
+
+# VALID TRANSITIONS
+"cut", "crossfade", "fadeThroughBlack", "fadeThroughWhite", "lightBleed"
+
+# TEXT CONFIG (all optional)
+{ fontSize?: number 24-60, fontFamily?: string, color?: string hex, position?: "top" | "center" | "bottom", fadeIn?: number 0-1, fadeOut?: number 0-1, maxWidth?: number 0-1, shadow?: boolean, lineHeight?: number }
+
+CRITICAL: Do NOT invent config fields. Only use the exact fields listed above.
 
 # BEATS AND IMAGES
 {BEATS_PLACEHOLDER}
