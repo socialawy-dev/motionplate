@@ -43,6 +43,8 @@ Data flow: Composer writes → Spec ← Engine reads
 3. **Hardware-aware** — Auto-detect capabilities, expose quality tiers, let users override.
 4. **Provider-agnostic AI** — The LLM Director uses an adapter pattern. Swappable between Gemini, Claude, OpenAI, Ollama, or none.
 
+### PoC - Perfect! `local-files\motionplate-engine-poc.jsx`
+
 ---
 
 ## Tech Stack
@@ -71,7 +73,7 @@ Data flow: Composer writes → Spec ← Engine reads
 
 ## Phase Plan
 
-### Phase 0 — Scaffold & Foundation
+### Phase 0 — Scaffold & Foundation (x)
 
 **Goal:** Clean project structure, dev environment, CI-ready.
 
@@ -163,7 +165,7 @@ motionplate/
 
 ---
 
-### Phase 1 — Engine Core (Layer 2)
+### Phase 1 — Engine Core (Layer 2) (x)
 
 **Goal:** Standalone renderer that takes a spec + images and outputs frames.
 
