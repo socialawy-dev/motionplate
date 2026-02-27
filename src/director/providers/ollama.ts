@@ -1,4 +1,4 @@
-import { LLMAdapter, GenerateOptions } from '../adapter';
+import type { LLMAdapter, GenerateOptions } from '../adapter';
 
 const DEFAULT_ENDPOINT = 'http://localhost:11434/api/generate';
 const DEFAULT_MODEL = 'llama3';
@@ -20,12 +20,13 @@ export class OllamaAdapter implements LLMAdapter {
             const baseUrl = new URL(this.endpoint).origin;
             const response = await fetch(baseUrl);
             return response.ok;
-        } catch (e) {
+        } catch {
             return false;
         }
     }
 
     async generate(prompt: string, options?: GenerateOptions): Promise<string> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const requestBody: any = {
             model: this.model,
             prompt: prompt,
@@ -58,6 +59,7 @@ export class OllamaAdapter implements LLMAdapter {
     }
 
     async generateJSON<T>(prompt: string, schema?: object, options?: GenerateOptions): Promise<T> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const requestBody: any = {
             model: this.model,
             prompt: prompt,

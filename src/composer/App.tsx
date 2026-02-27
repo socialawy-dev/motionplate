@@ -15,6 +15,7 @@ import Transport from './Transport';
 import PlateEditor from './PlateEditor';
 import SpecView from './SpecView';
 import ExportBar from './ExportBar';
+import DirectorPanel from './DirectorPanel';
 import { useProjectStore } from '../store/project';
 import { useSettingsStore } from '../store/settings';
 import { detectHardwareTier } from '../engine/profiler';
@@ -68,7 +69,7 @@ export default function App() {
                 </div>
 
                 <nav className="app__tabs" aria-label="Mode tabs">
-                    {(['compose', 'preview', 'spec'] as const).map((mode) => (
+                    {(['compose', 'preview', 'spec', 'director'] as const).map((mode) => (
                         <button
                             key={mode}
                             className={`tab-btn ${activeMode === mode ? 'tab-btn--active' : ''}`}
@@ -79,6 +80,7 @@ export default function App() {
                             {mode === 'compose' && '⊞ Compose'}
                             {mode === 'preview' && '▶ Preview'}
                             {mode === 'spec' && '{ } Spec'}
+                            {mode === 'director' && '🎬 Director'}
                         </button>
                     ))}
                 </nav>
@@ -126,6 +128,13 @@ export default function App() {
             {activeMode === 'spec' && (
                 <main className="app__main">
                     <SpecView />
+                </main>
+            )}
+
+            {/* ── Director mode ───────────────────────────────────── */}
+            {activeMode === 'director' && (
+                <main className="app__main">
+                    <DirectorPanel />
                 </main>
             )}
         </div>

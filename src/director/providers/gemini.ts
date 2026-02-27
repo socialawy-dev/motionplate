@@ -1,4 +1,4 @@
-import { LLMAdapter, GenerateOptions } from '../adapter';
+import type { LLMAdapter, GenerateOptions } from '../adapter';
 
 // Default Gemini model
 const GEMINI_MODEL = 'gemini-2.5-flash';
@@ -11,7 +11,8 @@ export class GeminiAdapter implements LLMAdapter {
 
     constructor(apiKey?: string) {
         // Attempt to get API key from env if available (e.g., in Node/Vite tests)
-        this.apiKey = apiKey || import.meta.env?.VITE_GEMINI_API_KEY || '';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.apiKey = apiKey || (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
     }
 
     async isAvailable(): Promise<boolean> {
@@ -83,7 +84,9 @@ export class GeminiAdapter implements LLMAdapter {
     }
 
     // Helper to build the request specific to Gemini
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private buildPayload(prompt: string, options?: GenerateOptions): any {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const contents: any[] = [];
 
         // Add system instruction if provided
@@ -111,6 +114,7 @@ export class GeminiAdapter implements LLMAdapter {
     }
 
     // Helper to safely extract response from Gemini payload
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private extractText(data: any): string {
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (text === undefined || text === null) {

@@ -1,4 +1,4 @@
-import { LLMAdapter, GenerateOptions } from '../adapter';
+import type { LLMAdapter } from '../adapter';
 
 // Dummy stubs for unsupported providers
 // Replace this file when you implement OpenAI

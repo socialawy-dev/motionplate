@@ -1,4 +1,4 @@
-import { Sequence } from '../spec/schema';
+import type { Sequence } from '../spec/schema';
 
 export interface GenerateOptions {
     temperature?: number;    // 0-1, default 0.3 for spec generation

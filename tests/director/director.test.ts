@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { LLMAdapter, GenerateOptions, DirectorInput } from '../../src/director/adapter';
+import { describe, it, expect } from 'vitest';
+import type { LLMAdapter, DirectorInput } from '../../src/director/adapter';
 import { directSequence } from '../../src/director/director';
 
 class MockAdapter implements LLMAdapter {
@@ -11,11 +11,13 @@ class MockAdapter implements LLMAdapter {
 
     async isAvailable() { return true; }
 
-    async generate(prompt: string, options?: GenerateOptions) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+    async generate(_prompt: string, _options?: any) {
         return "Mock response";
     }
 
-    async generateJSON<T>(prompt: string, schema?: object, options?: GenerateOptions): Promise<T> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+    async generateJSON<T>(prompt: string, _schema?: object, _options?: any): Promise<T> {
         this.generateJSONCallCount++;
 
         // Mocks for Parser and Mapper (first 2 calls)
