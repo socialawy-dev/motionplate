@@ -225,3 +225,37 @@ PS E:\co\MotionPlate> npm run test
 ```
 
 ![alt text](image.png)
+
+## Phase 3.5
+
+- [x] Fixed critical crossfade transition bug in renderer.ts
+- [x] Replaced no-op globalAlpha reset with proper fade-from-black overlay
+- [x] All tests passing (75/75) and linting clean
+
+## Phase 4 — LLM Director Implementation Walkthrough
+
+Completed the headless backend implementation for the LLM Director defined in Phase 4 of [docs/PLAN.md](file:///E:/co/motionplate/docs/PLAN.md).
+
+### Changes Made
+- **Adapter Interfaces** ([src/director/adapter.ts](file:///E:/co/motionplate/src/director/adapter.ts)): Defined exact shape definitions for [Beat](file:///E:/co/motionplate/src/director/adapter.ts#30-36), [MapResult](file:///E:/co/motionplate/src/director/mapper.ts#9-12), `DirectorInput/Output`, and the [LLMAdapter](file:///E:/co/motionplate/src/director/adapter.ts#9-22) contract itself.
+- **Providers** (`src/director/providers/*`):
+  - Created the native `fetch`-based Google Gemini Adapter enforcing the `responseMimeType: 'application/json'` strict formatting.
+  - Created the native `fetch`-based local Ollama adapter.
+  - Added stubs for Claude and OpenAI as explicitly requested.
+- **Parser (`P4-06`)** ([src/director/parser.ts](file:///E:/co/motionplate/src/director/parser.ts)): Implemented the logic to extract a sequence of temporal/thematic beats out of the script. Injected independent fail-fast validation.
+- **Mapper (`P4-07`)** ([src/director/mapper.ts](file:///E:/co/motionplate/src/director/mapper.ts)): Implemented logic assigning the extracted beats safely to the list of provided images securely evaluating hallucination bounds.
+- **Orchestrator (`P4-09`)** ([src/director/director.ts](file:///E:/co/motionplate/src/director/director.ts)): Configured the master [directSequence](file:///E:/co/motionplate/src/director/director.ts#12-102) pipeline:
+  - Generates the JSON sequence safely.
+  - Hooks directly into the system's AJV JSON Schema Validator ([validateSequence](file:///E:/co/motionplate/src/spec/validator.ts#37-76)).
+  - Implements a self-healing retry block: if the LLM hallucinated properties or emitted malformed json, we send the validation error logs back into the LLM context for exactly one revision round before hard-failing.
+
+### What Was Tested
+- Created [tests/director/director.test.ts](file:///E:/co/motionplate/tests/director/director.test.ts) to simulate an LLM responding structurally.
+- Explicitly tested the `Validation -> Fallback -> Valid Retry` pipeline with Vitest.
+
+### Validation Results
+- The test harness explicitly verified the retry mechanism, generating a garbage output initially and evaluating whether the framework intercepted it, retried successfully, and subsequently outputted correctly (producing exactly 4 invocation sequences to [generateJSON](file:///E:/co/motionplate/tests/director/director.test.ts#18-66) as expected).
+- The Vitest suite executed cleanly: `✓ Director Orchestrator (1)`
+
+### Next Steps
+This framework can now be directly wired into the React Composer UI. Feel free to connect the forms and hooks!

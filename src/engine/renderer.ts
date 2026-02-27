@@ -78,9 +78,12 @@ function applyTransitionOverlay(
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
         } else {
-            // crossfade: draw outgoing frame at reduced opacity handled by globalAlpha
-            ctx.globalAlpha = v;
-            ctx.globalAlpha = 1; // reset — pure alpha handled by overlay
+            // crossfade: fade from black overlay
+            const fadeAlpha = 1 - v;
+            if (fadeAlpha > 0.005) {
+                ctx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
         }
     }
 
