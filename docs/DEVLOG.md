@@ -149,3 +149,91 @@ Added comprehensive GitHub standards, security policies, and automation workflow
 ---
 
 ## Phase 2 — Spec Schema (Layer 1)
+
+- [x] P2-01 [schemas/sequence.schema.json](file:///e:/co/motionplate/schemas/sequence.schema.json) — JSON Schema draft-07
+- [x] P2-02 [src/spec/validator.ts](file:///e:/co/motionplate/src/spec/validator.ts) — AJV validator [validateSequence(obj)](file:///e:/co/motionplate/src/spec/validator.ts#37-76)
+- [x] P2-03 [src/spec/defaults.ts](file:///e:/co/motionplate/src/spec/defaults.ts) — default plate configs per effect
+- [x] P2-04/05 [src/spec/io.ts](file:///e:/co/motionplate/src/spec/io.ts) — [importSpec](file:///e:/co/motionplate/src/spec/io.ts#41-49) + [exportSpec](file:///e:/co/motionplate/src/spec/io.ts#64-78) + [specToJSON](file:///e:/co/motionplate/src/spec/io.ts#52-63)
+- [x] P2-06 Schema versioning — semver major = error, minor = warning
+- [x] P2-07 [src/spec/diff.ts](file:///e:/co/motionplate/src/spec/diff.ts) — [diffSpecs(a, b)](file:///e:/co/motionplate/src/spec/diff.ts#59-94) + [diffSummary](file:///e:/co/motionplate/src/spec/diff.ts#95-109)
+- [x] P2 tests — [tests/spec/spec.test.ts](file:///e:/co/motionplate/tests/spec/spec.test.ts) (24 tests)
+- [x] P2 gate — **75/75 tests ✅ · Build clean ✅**
+
+## Phase 3 — Composer UI Tasks
+
+- [x] P3-01 `src/composer/App.tsx` — root layout (header + 3-panel)
+- [x] P3-02 `src/composer/PlateList.tsx` — left panel, plate thumbnails + selection
+- [x] P3-03 `src/composer/DropZone.tsx` — image upload / drag-and-drop
+- [x] P3-04 `src/composer/PreviewCanvas.tsx` — center canvas, driven by engine
+- [x] P3-05 `src/composer/Transport.tsx` — play/pause/seek + time display
+- [x] P3-06 `src/composer/PlateEditor.tsx` — right panel, plate settings form
+- [x] P3-07 Effect selector (in PlateEditor)
+- [x] P3-08 Post-effect toggles (in PlateEditor)
+- [x] P3-09 Transition selector + duration input (in PlateEditor)
+- [x] P3-10 Text overlay editor (in PlateEditor)
+- [x] P3-11 `src/composer/SpecView.tsx` — JSON spec viewer panel
+- [x] P3-12 Spec download button
+- [x] P3-13 Spec import button
+- [x] P3-14 Export WebM button + progress bar
+- [x] P3-15 Plate reorder (drag-and-drop)
+- [x] P3-16 Plate duplicate
+- [x] P3-17 Undo/Redo (Ctrl+Z / Ctrl+Y)
+- [x] P3-18 Hardware tier badge
+- [x] P3-20 Keyboard shortcuts (Space=play, arrows=seek)
+- [x] Zustand stores — `project.ts`, `playback.ts`, `settings.ts`
+- [x] P3 gate — load images → compose → preview → export in browser
+
+```bash
+> motionplate-app@0.0.0 test
+> vitest
+
+
+ DEV  v4.0.18 E:/co/motionplate
+
+ ✓ tests/engine/text.test.ts (11 tests) 13ms
+ ✓ tests/engine/effects.test.ts (11 tests) 20ms
+ ✓ tests/engine/renderer.test.ts (14 tests) 19ms
+ ✓ tests/spec/spec.test.ts (24 tests) 12ms
+ ✓ src/test/basic.test.ts (1 test) 4ms
+ ✓ tests/engine/transitions.test.ts (14 tests) 6ms
+
+ Test Files  6 passed (6)
+      Tests  75 passed (75)
+   Start at  18:45:22
+   Duration  2.74s (transform 477ms, setup 867ms, import 761ms, tests 74ms, environment 6.04s)
+
+vite v7.3.1 building client environment for production...
+✓ 203 modules transformed.
+dist/index.html                   0.86 kB │ gzip:   0.47 kB
+dist/assets/index-DlVZWlDJ.css    9.66 kB │ gzip:   2.36 kB
+dist/assets/index-B4lVc3I4.js   338.38 kB │ gzip: 107.02 kB
+✓ built in 1.55s
+PS E:\co\motionplate> npm run lint
+
+> motionplate-app@0.0.0 lint
+> eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+
+
+E:\co\motionplate\src\composer\DropZone.tsx
+  32:19  error  'React' is not defined  no-undef
+  43:19  error  'React' is not defined  no-undef
+
+E:\co\motionplate\src\composer\SpecView.tsx
+  17:36  error  'React' is not defined  no-undef
+
+E:\co\motionplate\src\composer\Transport.tsx
+  33:13  error  'React' is not defined  no-undef
+
+E:\co\motionplate\src\engine\transitions\cut.ts
+  7:28  error  '_progress' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\co\motionplate\src\spec\defaults.ts
+  11:24  error  '_ScreenShakeConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\co\motionplate\src\test\setup.ts
+  39:32  error  'CanvasTextAlign' is not defined     no-undef
+  40:35  error  'CanvasTextBaseline' is not defined  no-undef
+  41:29  error  'CanvasDirection' is not defined     no-undef
+```
+
+![alt text](image.png)

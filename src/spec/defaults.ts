@@ -6,9 +6,8 @@ import type {
   ParticlesConfig,
   FogConfig,
   ChromaticAberrationConfig,
-  ScreenShakeConfig,
   VignetteConfig,
-  ScreenShakeConfig as _ScreenShakeConfig,
+  ScreenShakeConfig,
   TextConfig,
   Plate,
 } from './schema';

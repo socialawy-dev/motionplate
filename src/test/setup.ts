@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Canvas 2D context types for jsdom mock
+type CanvasTextAlign = 'left' | 'right' | 'center' | 'start' | 'end';
+type CanvasTextBaseline = 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom';
+type CanvasDirection = 'ltr' | 'rtl' | 'inherit';
+
 // ─── Canvas 2D mock for jsdom ─────────────────────────────────────────────────
 // jsdom does not implement HTMLCanvasElement.getContext() without the native
 // `canvas` npm package. We provide a vi.fn()-based stub here so engine unit

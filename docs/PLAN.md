@@ -203,7 +203,7 @@ motionplate/
 
 ---
 
-### Phase 2 — Spec Schema (Layer 1)
+### Phase 2 — Spec Schema (Layer 1) (x)
 
 **Goal:** Validated, versioned JSON schema. Import/export. Defaults.
 
@@ -221,7 +221,7 @@ motionplate/
 
 ---
 
-### Phase 3 — Composer UI (Layer 3)
+### Phase 3 — Composer UI (Layer 3) (x)
 
 **Goal:** Full interactive editor. Compose, preview, export.
 
