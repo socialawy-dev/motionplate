@@ -230,6 +230,7 @@ PS E:\co\MotionPlate> npm run test
 
 - [x] Fixed critical crossfade transition bug in renderer.ts
 - [x] Replaced no-op globalAlpha reset with proper fade-from-black overlay
+<<<<<<< HEAD
 - [x] All tests passing (75/75) and linting clean
 
 ## Phase 4 — LLM Director Implementation Walkthrough
