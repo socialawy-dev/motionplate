@@ -1,4 +1,4 @@
-import type { Sequence, Plate, PlateAtTime, PostEffectName } from '../spec/schema';
+import type { Sequence, Plate, PlateAtTime, PostEffectName, TransitionName } from '../spec/schema';
 import { getEffect } from './effects/index';
 import { getPost } from './post/index';
 import { getTransition } from './transitions/index';
@@ -90,13 +90,15 @@ function applyOverlayTransition(
     plate: Plate,
     plateIdx: number,
     localTime: number,
+    nextPlateTransition?: string,
 ): void {
     const transition = plate.transition ?? 'cut';
     if (transition === 'cut') return;
+    if (isCompositeTransition(transition as TransitionName)) return;
 
     const td = plate.transitionDuration ?? 1.0;
     const plateDur = plate.duration;
-    const transFn = getTransition(transition);
+    const transFn = getTransition(transition as TransitionName);
 
     // Fade IN at the start (only if not the first plate)
     if (localTime < td && plateIdx > 0) {
@@ -124,12 +126,17 @@ function applyOverlayTransition(
         }
     }
 
-    // Fade OUT at the end of the plate
+    // Fade OUT at the end — skip if the next plate uses a composite transition
+    // (its transition-IN zone will handle the blend)
     if (localTime > plateDur - td) {
-        const tp = (plateDur - localTime) / td;
-        const alpha = Math.max(0, Math.min(1, tp));
-        ctx.fillStyle = `rgba(0,0,0,${1 - alpha})`;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (nextPlateTransition && isCompositeTransition(nextPlateTransition as TransitionName)) {
+            // Next plate's composite handles this — do nothing
+        } else {
+            const tp = (plateDur - localTime) / td;
+            const alpha = Math.max(0, Math.min(1, tp));
+            ctx.fillStyle = `rgba(0,0,0,${1 - alpha})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
     }
 
     ctx.globalAlpha = 1;
@@ -207,7 +214,8 @@ export function renderFrame(
     }
 
     // 3. Overlay transition
-    applyOverlayTransition(ctx, canvas, plate, plateIdx, localTime);
+    const nextPlate = spec.plates[plateIdx + 1];
+    applyOverlayTransition(ctx, canvas, plate, plateIdx, localTime, nextPlate?.transition);
 
     // 4. Text
     if (plate.text) {
