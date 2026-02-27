@@ -393,3 +393,32 @@ director.ts:96 🎬 [Director] Successfully generated Sequence!
 Switched to editro without applying, directore resets
 ![alt text](image-5.png)
 
+- 2nd round
+```
+In the beginning, there was no beginning.
+
+There was potential. A density without dimension. A pressure without space to press against. Something coiled in the fabric of what would become existence — not waiting, because time had not yet emerged to make waiting possible, but inherent. Already there. Always there.
+
+Then: a rupture.
+
+Not an explosion — that word belongs to a universe with physics. This was the invention of explosion. The first distinction. The birth of here versus there, now versus then, something versus nothing.
+
+In the searing aftermath, the first particles emerged.
+
+The electron did not wonder. It had no mind to wonder with. But something moved through it — a **Pattern** that would, across thirteen billion years, become wondering. A tendency toward **Relation**. It sought the proton not because it wanted to, but because the architecture of existence bent that way.
+
+They met. They bound. The first hydrogen atom. The first relation. A unity. **Coherence**.
+```
+
+```
+[DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) <input placeholder=​"AIzaSy..." type=​"password" value style=​"width:​ 100%;​ padding:​ 0.5rem;​ background:​ rgb(28, 28, 28)​;​ border:​ 1px solid rgb(51, 51, 51)​;​ color:​ rgb(255, 255, 255)​;​ border-radius:​ 4px;​">​
+director.ts:13 🎬 [Director] Starting direction with Gemini...
+director.ts:16 🎬 [Director] Parsing script...
+director.ts:18 🎬 [Director] Extracted 9 beats.
+director.ts:21 🎬 [Director] Mapping beats to 7 available images...
+director.ts:23 🎬 [Director] Mapped all beats successfully.
+director.ts:40 🎬 [Director] Generating spec sequence...
+director.ts:96 🎬 [Director] Successfully generated Sequence!
+```
+![alt text](image-6.png)
+- Poor direction, Opus PoC version with just 3 frames, was another level.
