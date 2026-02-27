@@ -7,7 +7,10 @@ import { useProjectStore } from '../store/project';
 import type { EffectName, TransitionName, PostEffectName } from '../spec/schema';
 
 const EFFECTS: EffectName[] = ['kenBurns', 'pulse', 'drift', 'rotate', 'static'];
-const TRANSITIONS: TransitionName[] = ['cut', 'crossfade', 'fadeThroughBlack', 'fadeThroughWhite', 'lightBleed'];
+const TRANSITIONS: TransitionName[] = [
+    'cut', 'crossfade', 'fadeThroughBlack', 'fadeThroughWhite', 'lightBleed',
+    'wipeLeft', 'wipeDown', 'slideLeft', 'zoomThrough',
+];
 const POST_EFFECTS: PostEffectName[] = ['vignette', 'bloom', 'particles', 'fog', 'chromaticAberration', 'screenShake'];
 
 const EFFECT_LABELS: Record<EffectName, string> = {
@@ -16,6 +19,8 @@ const EFFECT_LABELS: Record<EffectName, string> = {
 const TRANSITION_LABELS: Record<TransitionName, string> = {
     cut: 'Cut', crossfade: 'Crossfade', fadeThroughBlack: 'Fade Black',
     fadeThroughWhite: 'Fade White', lightBleed: 'Light Bleed',
+    wipeLeft: 'Wipe Left', wipeDown: 'Wipe Down',
+    slideLeft: 'Slide Left', zoomThrough: 'Zoom Through',
 };
 const POST_LABELS: Record<PostEffectName, string> = {
     vignette: 'Vignette', bloom: 'Bloom', particles: 'Particles',

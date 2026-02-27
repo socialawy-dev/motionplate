@@ -1,7 +1,7 @@
-// ─── MotionPlate — Layer 1: TypeScript Spec Types ────────────────────────────
+// ——— MotionPlate — Layer 1: TypeScript Spec Types ————————————————————————
 // JSON is truth. This file defines every shape used by the engine and composer.
 
-// ─── Effect Names ─────────────────────────────────────────────────────────────
+// ——— Effect Names ————————————————————————————————————————————————————————
 
 export type EffectName = 'kenBurns' | 'pulse' | 'drift' | 'rotate' | 'static';
 
@@ -13,34 +13,37 @@ export type PostEffectName =
   | 'chromaticAberration'
   | 'screenShake';
 
-export type TransitionName =
-  | 'cut'
-  | 'crossfade'
-  | 'fadeThroughBlack'
-  | 'fadeThroughWhite'
-  | 'lightBleed';
+// ——— Transition Names (split by rendering strategy) ——————————————————————
 
-// ─── Effect Configs ───────────────────────────────────────────────────────────
+/** Overlay transitions: single-plate + color overlay */
+export type OverlayTransitionName = 'fadeThroughBlack' | 'fadeThroughWhite' | 'lightBleed';
+
+/** Composite transitions: dual-plate geometric compositing */
+export type CompositeTransitionName = 'crossfade' | 'wipeLeft' | 'wipeDown' | 'slideLeft' | 'zoomThrough';
+
+/** All transition names (cut is neither overlay nor composite — instant swap) */
+export type TransitionName = 'cut' | OverlayTransitionName | CompositeTransitionName;
+
+// ——— Effect Configs ——————————————————————————————————————————————————————
 
 export interface KenBurnsConfig {
-  startScale?: number;   // default 1.0
-  endScale?: number;     // default 1.15
-  panX?: number;         // 0..1 fraction of canvas width (default 0.02)
-  panY?: number;         // 0..1 fraction of canvas height (default 0.01)
-  anchor?: 'center' | 'topLeft'; // default 'center'
+  startScale?: number;
+  endScale?: number;
+  panX?: number;
+  panY?: number;
+  anchor?: 'center' | 'topLeft';
 }
 
 export interface PulseConfig {
-  frequency?: number;    // oscillations per plate (default 2)
-  amplitude?: number;    // scale amplitude (default 0.02)
+  frequency?: number;
+  amplitude?: number;
 }
 
 export interface RotateConfig {
-  maxAngle?: number;     // degrees (default 2)
+  maxAngle?: number;
 }
 
 export interface DriftConfig {
-  // Uses built-in sinusoidal; no user config currently.
   [key: string]: unknown;
 }
 
@@ -48,7 +51,6 @@ export interface StaticConfig {
   [key: string]: unknown;
 }
 
-// Union of all effect configs
 export type EffectConfig =
   | KenBurnsConfig
   | PulseConfig
@@ -56,32 +58,32 @@ export type EffectConfig =
   | DriftConfig
   | StaticConfig;
 
-// ─── Post-Effect Configs ──────────────────────────────────────────────────────
+// ——— Post-Effect Configs —————————————————————————————————————————————————
 
 export interface VignetteConfig {
-  intensity?: number;    // 0-1 (default 0.4)
+  intensity?: number;
 }
 
 export interface BloomConfig {
-  intensity?: number;    // 0-1 (default 0.15)
+  intensity?: number;
 }
 
 export interface ParticlesConfig {
-  count?: number;        // particle count (default 40)
-  seed?: number;         // RNG seed (default 42)
+  count?: number;
+  seed?: number;
 }
 
 export interface FogConfig {
-  intensity?: number;    // 0-1 (default 0.12)
+  intensity?: number;
 }
 
 export interface ChromaticAberrationConfig {
-  intensity?: number;    // pixel shift (default 2)
+  intensity?: number;
 }
 
 export interface ScreenShakeConfig {
-  intensity?: number;    // max pixel offset (default 5)
-  decay?: boolean;       // shake decays over plate time (default true)
+  intensity?: number;
+  decay?: boolean;
 }
 
 export type PostConfig =
@@ -92,45 +94,45 @@ export type PostConfig =
   | ChromaticAberrationConfig
   | ScreenShakeConfig;
 
-// ─── Text Overlay Config ──────────────────────────────────────────────────────
+// ——— Text Overlay Config —————————————————————————————————————————————————
 
 export type TextPosition = 'top' | 'center' | 'bottom';
 
 export interface TextConfig {
-  fontSize?: number;        // px (default 28)
-  fontFamily?: string;      // CSS font (default 'Georgia, serif')
-  color?: string;           // CSS color (default '#ffffff')
-  position?: TextPosition;  // (default 'center')
-  fadeIn?: number;          // 0-1 fraction of plate duration (default 0.15)
-  fadeOut?: number;         // 0-1 (default 0.15)
-  maxWidth?: number;        // 0-1 fraction of canvas width (default 0.8)
-  shadow?: boolean;         // drop shadow (default true)
-  lineHeight?: number;      // multiplier (default 1.5)
+  fontSize?: number;
+  fontFamily?: string;
+  color?: string;
+  position?: TextPosition;
+  fadeIn?: number;
+  fadeOut?: number;
+  maxWidth?: number;
+  shadow?: boolean;
+  lineHeight?: number;
 }
 
-// ─── Plate ────────────────────────────────────────────────────────────────────
+// ——— Plate ———————————————————————————————————————————————————————————————
 
 export interface Plate {
   id: string;
-  duration: number;                    // seconds
+  duration: number;
   effect: EffectName;
   effectConfig?: EffectConfig;
   post?: PostEffectName[];
   postConfig?: Partial<Record<PostEffectName, PostConfig>>;
   transition: TransitionName;
-  transitionDuration?: number;         // seconds (default 1.0)
+  transitionDuration?: number;
   text?: string;
   textConfig?: TextConfig;
 }
 
-// ─── Sequence ─────────────────────────────────────────────────────────────────
+// ——— Sequence ————————————————————————————————————————————————————————————
 
 export interface SequenceMeta {
   title: string;
-  fps: number;             // default 30
-  width: number;           // px (default 1280)
-  height: number;          // px (default 720)
-  schemaVersion: string;   // semver e.g. "1.0.0"
+  fps: number;
+  width: number;
+  height: number;
+  schemaVersion: string;
 }
 
 export interface Sequence {
@@ -138,7 +140,7 @@ export interface Sequence {
   plates: Plate[];
 }
 
-// ─── Hardware Profiler ────────────────────────────────────────────────────────
+// ——— Hardware Profiler ———————————————————————————————————————————————————
 
 export type HardwareTier = 'high' | 'medium' | 'low';
 
@@ -146,10 +148,10 @@ export interface HardwareTierResult {
   tier: HardwareTier;
   webgl: boolean;
   gpu: string;
-  memory: number; // GB reported by navigator.deviceMemory or 0 if unavailable
+  memory: number;
 }
 
-// ─── Engine Function Signatures ───────────────────────────────────────────────
+// ——— Engine Function Signatures ——————————————————————————————————————————
 
 export type EffectFn = (
   ctx: CanvasRenderingContext2D,
@@ -166,14 +168,23 @@ export type PostFn = (
   config?: PostConfig
 ) => void;
 
-// Returns an alpha value 0→1 given transition progress 0→1
+/** Scalar transition — returns alpha given progress 0→1 (overlay transitions) */
 export type TransitionFn = (progress: number) => number;
 
-// ─── Sequencer Result ─────────────────────────────────────────────────────────
+/** Composite transition — renders both plates onto ctx given progress 0→1 */
+export type CompositeTransitionFn = (
+  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
+  outgoing: HTMLCanvasElement,
+  incoming: HTMLCanvasElement,
+  progress: number,
+) => void;
+
+// ——— Sequencer Result ————————————————————————————————————————————————————
 
 export interface PlateAtTime {
   plate: Plate;
   plateIdx: number;
-  progress: number; // 0→1 within the plate
-  plateStart: number; // absolute time where this plate started
+  progress: number;
+  plateStart: number;
 }
