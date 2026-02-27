@@ -1,7 +1,7 @@
 import type { LLMAdapter, GenerateOptions } from '../adapter';
 
 // Default Gemini model
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-3-flash-preview';
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 export class GeminiAdapter implements LLMAdapter {
@@ -108,7 +108,7 @@ export class GeminiAdapter implements LLMAdapter {
             systemInstruction,
             generationConfig: {
                 temperature: options?.temperature ?? 0.3,
-                maxOutputTokens: options?.maxTokens ?? 8192,
+                maxOutputTokens: options?.maxTokens ?? 16384,
             }
         };
     }
