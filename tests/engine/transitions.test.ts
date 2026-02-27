@@ -80,8 +80,11 @@ describe('transition registry', () => {
         expect(getTransition('lightBleed')).toBe(lightBleed);
     });
 
-    it('throws for unknown transition names', () => {
+    it('falls back to crossfade for unknown transition names', () => {
         // @ts-expect-error intentional bad input
-        expect(() => getTransition('unknown')).toThrow('Unknown transition');
+        const fn = getTransition('unknown');
+        // Should return crossfade (not throw)
+        expect(fn(0)).toBe(0);
+        expect(fn(1)).toBe(1);
     });
 });
