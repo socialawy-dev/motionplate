@@ -2,14 +2,11 @@ import type { Sequence, Plate, PlateAtTime, PostEffectName } from '../spec/schem
 import { getEffect } from './effects/index';
 import { getPost } from './post/index';
 import { getTransition } from './transitions/index';
+import { isCompositeTransition, getCompositeTransition } from './transitions/index';
 import { renderText } from './text';
 
 /**
  * Sequencer — P1-24
- *
- * Given a sequence and a time `t` (in seconds), returns the active plate,
- * its index, its local progress (0→1), and the absolute start time.
- * Returns null if `t` is past the end of the sequence or the sequence is empty.
  */
 export function getPlateAtTime(spec: Sequence, t: number): PlateAtTime | null {
     if (!spec.plates.length) return null;
@@ -28,7 +25,7 @@ export function getPlateAtTime(spec: Sequence, t: number): PlateAtTime | null {
         elapsed += plate.duration;
     }
 
-    return null; // past end
+    return null;
 }
 
 /**
@@ -38,14 +35,56 @@ export function getTotalDuration(spec: Sequence): number {
     return spec.plates.reduce((sum, p) => sum + p.duration, 0);
 }
 
-/**
- * Applies the transition overlay for a plate based on current local time.
- *
- * Strategy (matches PoC behaviour):
- *   - Fade IN at the start of the plate (when plateIdx > 0)
- *   - Fade OUT at the end of every plate (into the next one)
- */
-function applyTransitionOverlay(
+// ——— Offscreen buffers (module-scope singletons) —————————————————————————
+
+let _bufferA: HTMLCanvasElement | null = null;
+let _bufferB: HTMLCanvasElement | null = null;
+
+function getBuffer(canvas: HTMLCanvasElement, slot: 'A' | 'B'): HTMLCanvasElement {
+    const existing = slot === 'A' ? _bufferA : _bufferB;
+    if (existing && existing.width === canvas.width && existing.height === canvas.height) {
+        return existing;
+    }
+    const buf = document.createElement('canvas');
+    buf.width = canvas.width;
+    buf.height = canvas.height;
+    if (slot === 'A') _bufferA = buf;
+    else _bufferB = buf;
+    return buf;
+}
+
+// ——— Helper: render a single plate (effect + post) to a canvas ———————————
+
+function renderPlateToBuffer(
+    buffer: HTMLCanvasElement,
+    plate: Plate,
+    img: HTMLImageElement,
+    progress: number,
+): void {
+    const ctx = buffer.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, buffer.width, buffer.height);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, buffer.width, buffer.height);
+
+    // Effect
+    const effectFn = getEffect(plate.effect);
+    effectFn(ctx, img, buffer, progress, plate.effectConfig);
+
+    // Post-processing
+    if (plate.post?.length) {
+        for (const postName of plate.post) {
+            const postFn = getPost(postName as PostEffectName);
+            const postConfig = plate.postConfig?.[postName as PostEffectName];
+            postFn(ctx, buffer, progress, postConfig);
+        }
+    }
+}
+
+// ——— Overlay transitions (existing behavior) —————————————————————————————
+
+function applyOverlayTransition(
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
     plate: Plate,
@@ -71,14 +110,12 @@ function applyTransitionOverlay(
             ctx.fillStyle = `rgba(0,0,0,${1 - v})`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         } else if (transition === 'lightBleed') {
-            // lightBleed: use a white flash overlay at the start
             const flashAlpha = 1 - v;
             if (flashAlpha > 0) {
                 ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
         } else {
-            // crossfade: fade from black overlay
             const fadeAlpha = 1 - v;
             if (fadeAlpha > 0.005) {
                 ctx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
@@ -98,15 +135,8 @@ function applyTransitionOverlay(
     ctx.globalAlpha = 1;
 }
 
-/**
- * Main frame renderer — P1-23
- *
- * Renders a complete frame onto the provided canvas context at time `t`.
- * `images` is indexed by plate position; modulo-wrapped if fewer images
- * than plates (matches PoC behaviour).
- *
- * Render order: black fill → effect → post-effects → transition overlay → text
- */
+// ——— Main frame renderer — P1-23 ————————————————————————————————————————
+
 export function renderFrame(
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
@@ -129,11 +159,45 @@ export function renderFrame(
     const img = images[imgIdx];
     if (!img) return;
 
-    // 1. Main motion effect
+    const localTime = t - plateStart;
+    const td = plate.transitionDuration ?? 1.0;
+    const inTransitionZone = localTime < td && plateIdx > 0;
+
+    // ——— COMPOSITE transition path ——————————————————————————————————————
+    if (inTransitionZone && isCompositeTransition(plate.transition)) {
+        const outgoingPlate = spec.plates[plateIdx - 1];
+        const outgoingImg = images[(plateIdx - 1) % images.length];
+
+        if (outgoingPlate && outgoingImg) {
+            const bufA = getBuffer(canvas, 'A');
+            const bufB = getBuffer(canvas, 'B');
+
+            // Render outgoing plate at progress=1.0 (its final frame)
+            renderPlateToBuffer(bufA, outgoingPlate, outgoingImg, 1.0);
+
+            // Render incoming plate at current progress
+            renderPlateToBuffer(bufB, plate, img, progress);
+
+            // Composite
+            const transitionProgress = localTime / td;
+            const compositeFn = getCompositeTransition(plate.transition);
+            compositeFn(ctx, canvas, bufA, bufB, transitionProgress);
+
+            // Text for incoming plate
+            if (plate.text) {
+                renderText(ctx, canvas, plate.text, progress, plate.textConfig);
+            }
+            return;
+        }
+    }
+
+    // ——— Standard single-plate path (unchanged) —————————————————————————
+
+    // 1. Effect
     const effectFn = getEffect(plate.effect);
     effectFn(ctx, img, canvas, progress, plate.effectConfig);
 
-    // 2. Post-processing effects
+    // 2. Post-processing
     if (plate.post?.length) {
         for (const postName of plate.post) {
             const postFn = getPost(postName as PostEffectName);
@@ -142,11 +206,10 @@ export function renderFrame(
         }
     }
 
-    // 3. Transition overlay
-    const localTime = t - plateStart;
-    applyTransitionOverlay(ctx, canvas, plate, plateIdx, localTime);
+    // 3. Overlay transition
+    applyOverlayTransition(ctx, canvas, plate, plateIdx, localTime);
 
-    // 4. Text overlay
+    // 4. Text
     if (plate.text) {
         renderText(ctx, canvas, plate.text, progress, plate.textConfig);
     }

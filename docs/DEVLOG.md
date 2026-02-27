@@ -454,17 +454,19 @@ Test the director end-to-end with the same script + 7 images. You should see:
 -  Added the constraint to the parser prompt. 
 
 ## Phase 4.7: — Spatial Transitions & Dual-Image Compositing
-- Step 1: src/spec/schema.ts -- Replaced (x)
+
+### Step 1: src/spec/schema.ts -- Replaced (x)
 - Two quick stubs to fix compilation. These get replaced properly in Steps 6-8.
 `src\engine\transitions\index.ts` & `src/composer/PlateEditor.tsx` — only the top section (lines 1-25ish)
 
-- Step 2: schemas/sequence.schema.json
+### Step 2: schemas/sequence.schema.json (x)
 Only change is the transition enum — add 4 values
 `wipeLeft` - `wipeDown` - `slideLeft` - `zoomThrough`
 
-- updated the schema version from '1.0.0' to '1.1.0' in defaults.ts.
+### Step 3: updated the schema version (x)
+> From '1.0.0' to '1.1.0' in defaults.ts.
 
-- updated the test to match the new fallback behavior. The test now verifies that getTransition('unknown') returns the crossfade function (which returns 0 at progress 0 and 1 at progress 1) instead of throwing an error.
+- Updated the test to match the new fallback behavior. The test now verifies that getTransition('unknown') returns the crossfade function (which returns 0 at progress 0 and 1 at progress 1) instead of throwing an error.
 
 ```bash
 PS E:\co\MotionPlate> npm run test
@@ -508,4 +510,54 @@ stdout | tests/director/director.test.ts > Director Orchestrator > should succes
       Tests  76 passed (76)
    Start at  01:12:12
    Duration  2.72s (transform 411ms, setup 801ms, import 851ms, tests 85ms, environment 6.19s)
+```
+
+### Step 4:  — the big one: renderer.ts (x)
+This is the dual-plate composite rendering path. Full replacement for src/engine/renderer.ts
+```
+PS E:\co\MotionPlate> npx tsc --noEmit
+PS E:\co\MotionPlate> npm run test
+
+> motionplate-app@0.0.0 test
+> vitest
+
+
+ DEV  v4.0.18 E:/co/motionplate
+
+ ✓ tests/engine/text.test.ts (11 tests) 15ms
+ ✓ tests/engine/effects.test.ts (11 tests) 20ms
+ ✓ tests/engine/renderer.test.ts (14 tests) 14ms
+ ✓ tests/spec/spec.test.ts (24 tests) 16ms
+ ✓ tests/engine/transitions.test.ts (14 tests) 5ms
+ ✓ src/test/basic.test.ts (1 test) 2ms
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Starting direction with MockAdapter...
+🎬 [Director] Parsing script...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Extracted 1 beats.
+🎬 [Director] Mapping beats to 1 available images...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Mapped all beats successfully.
+🎬 [Director] Generating spec sequence...
+
+stderr | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+⚠️ [Director] Initial generation failed: Schema validation failed:
+(root): must have required property 'meta'
+(root): must have required property 'plates'
+(root): must NOT have additional properties. Attempting 1 retry...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Successfully generated Sequence!
+
+ ✓ tests/director/director.test.ts (1 test) 5ms
+
+ Test Files  7 passed (7)
+      Tests  76 passed (76)
+   Start at  01:17:33
+   Duration  2.70s (transform 466ms, setup 835ms, import 868ms, tests 77ms, environment 6.14s)
+
+ PASS  Waiting for file changes...
+       press h to show help, press q to quit
 ```
