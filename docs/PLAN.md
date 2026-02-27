@@ -325,6 +325,104 @@ The director does NOT render — it only generates a spec. The engine renders it
 
 ---
 
+### Phase 4.7 — Spatial Transitions & Dual-Image Compositing
+
+> Problem Statement
+Current transitions are alpha-only overlays on a single plate. The renderer draws one image, then overlays a colored rectangle (rgba(0,0,0,alpha)). Real crossfades need to draw both plates blended together, and spatial transitions (wipe, slide, zoom-through) need to position both plates geometrically.
+
+#### Architecture Change
+- Current flow:
+```
+renderFrame(t) →
+  find active plate →
+  draw plate image with effect →
+  apply post effects →
+  overlay transition color rectangle →
+  draw text
+```
+- New flow:
+```
+renderFrame(t) →
+  find active plate →
+  check if we're in a transition zone (start or end of plate) →
+  
+  IF in transition zone:
+    identify outgoing plate + incoming plate
+    render outgoing plate to offscreen buffer A (effect + post)
+    render incoming plate to offscreen buffer B (effect + post)
+    call compositeTransition(ctx, bufferA, bufferB, progress, type)
+    draw text for incoming plate
+    
+  ELSE (mid-plate, no transition):
+    draw plate image with effect (existing path)
+    apply post effects
+    draw text
+```
+#### Key Design Decisions
+1. Two offscreen canvases — created once, reused per frame. No per-frame allocation.
+2. Composite transitions are a new function type — they receive two rendered buffers and a progress value, and they draw the final composite onto the main canvas.
+3. Old alpha transitions still work — fadeThroughBlack, fadeThroughWhite, lightBleed don't need dual-plate rendering. They stay as-is (overlay-based). Only crossfade and the new spatial transitions use the composite path.
+4. Schema addition — new TransitionName values: wipeLeft, wipeDown, zoomThrough, slideLeft. Non-breaking (additive).
+
+#### Files to Change
+
+| File | Change | Risk |
+|------|--------|------|
+| `src/spec/schema.ts` | Add 4 new TransitionName values | Low — additive |
+| `schemas/sequence.schema.json` | Add 4 new transition enum values | Low — additive |
+| `src/engine/transitions/wipeLeft.ts` | NEW — clip-rect reveal left-to-right | None |
+| `src/engine/transitions/wipeDown.ts` | NEW — clip-rect reveal top-to-bottom | None |
+| `src/engine/transitions/zoomThrough.ts` | NEW — zoom-in blur → flash → incoming | None |
+| `src/engine/transitions/slideLeft.ts` | NEW — push A left, B enters right | None |
+| `src/engine/transitions/index.ts` | Register new transitions, export composite lookup | Low |
+| `src/engine/renderer.ts` | MAJOR — dual-plate composite rendering path | High — core render loop |
+| `src/director/prompts.ts` | Add new transitions to cinematography guide | Low |
+| `src/spec/defaults.ts` | Add defaults for new transitions | Low |
+| `tests/engine/transitions.test.ts` | Add tests for 4 new transitions | None |
+| `tests/engine/renderer.test.ts` | Add test for dual-plate crossfade rendering | Low |
+
+#### New Types
+```ts
+// In schema.ts or a new transitions type file:
+export type CompositeTransitionFn = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    outgoing: HTMLCanvasElement,  // pre-rendered buffer A
+    incoming: HTMLCanvasElement,  // pre-rendered buffer B  
+    progress: number,            // 0→1
+) => void;
+```
+#### Transition Specs
+
+| Transition | Type | Visual Description |
+|------------|------|---------------------|
+| crossfade | UPGRADE to composite | Draw outgoing at 1-progress alpha, incoming at progress alpha. Both visible simultaneously. |
+| wipeLeft | Composite | Draw outgoing full, then draw incoming clipped to [0, 0, width*progress, height]. Sharp edge reveals left-to-right. |
+| wipeDown | Composite | Draw outgoing full, then draw incoming clipped to [0, 0, width, height*progress]. Top-to-bottom reveal. |
+| slideLeft | Composite | Draw outgoing offset by -width*progress, draw incoming offset by width*(1-progress). Both slide. |
+| zoomThrough | Composite | Phase 1 (0–0.4): outgoing zooms in + white overlay builds. Phase 2 (0.4–0.6): white flash peak. Phase 3 (0.6–1.0): incoming fades in with slight zoom-out settle. |
+| fadeThroughBlack | Overlay (unchanged) | Existing behavior — single plate + black overlay. |
+| fadeThroughWhite | Overlay (unchanged) | Existing behavior — single plate + white overlay. |
+| lightBleed | Overlay (unchanged) | Existing behavior — hold + flash. |
+| cut | None (unchanged) | Instant swap. |
+
+#### Implementation Order
+```
+Step 1: schema.ts + sequence.schema.json — add new transition names
+Step 2: 4 new composite transition files (pure functions, no deps)
+Step 3: transitions/index.ts — dual registry (legacy + composite)
+Step 4: renderer.ts — dual-plate rendering path
+Step 5: prompts.ts — teach director about new transitions
+Step 6: tests
+Step 7: lint + build + gate
+```
+#### Risk Mitigation
+- The renderer change is the only high-risk item. We keep the existing overlay path for fadeThroughBlack/White/lightBleed completely untouched.
+- Crossfade upgrades from overlay→composite, but the visual result is strictly better (actual dual-image blend vs fade-from-black).
+- If composite path fails for any reason, the renderer falls back to the existing overlay behavior.
+
+---
+
 ### Phase 5 — Audio & Polish
 
 **Goal:** Audio sync slot, export quality, UX refinement.
