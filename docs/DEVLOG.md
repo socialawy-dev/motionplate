@@ -225,3 +225,9 @@ PS E:\co\MotionPlate> npm run test
 ```
 
 ![alt text](image.png)
+
+## Phase 3.5
+
+- [x] Fixed critical crossfade transition bug in renderer.ts
+- [x] Replaced no-op globalAlpha reset with proper fade-from-black overlay
+- [x] All tests passing (75/75) and linting clean
