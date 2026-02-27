@@ -452,4 +452,12 @@ Test the director end-to-end with the same script + 7 images. You should see:
 
 ### Fix 5
 -  Added the constraint to the parser prompt. 
--  
+
+## Phase 4.7: — Spatial Transitions & Dual-Image Compositing
+- Step 1: src/spec/schema.ts -- Replaced (x)
+- Two quick stubs to fix compilation. These get replaced properly in Steps 6-8.
+`src\engine\transitions\index.ts` & `src/composer/PlateEditor.tsx` — only the top section (lines 1-25ish)
+
+- Step 2: schemas/sequence.schema.json
+Only change is the transition enum — add 4 values
+
