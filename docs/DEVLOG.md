@@ -752,3 +752,14 @@ Added visual highlight for the active plate in the sidebar.
   - All mutation handlers (updatePlate, setEffect, setTransition, togglePost)
    now target displayIdx, so any edits during playback apply to the correct
   plate
+
+### ● Fix: exporter.ts:74 — frameInterval / 4 → frameInterval
+
+```markdown
+- **Root cause**: The export loop waits only `frameInterval / 4` ms between frames instead of `frameInterval`. Since `MediaRecorder` records based on real wall-clock time, the video duration equals how long the render loop actually takes, not the intended plate duration.
+- **Example**: `fps = 30` → `frameInterval = 33.3ms`. Delay used was `33.3ms / 4 = 8.3ms` per frame.
+- **Trade-off**: Export now runs at real-time speed (a 3-second sequence takes ~3 seconds to export). The `/ 4` was originally added for UI responsiveness, but it caused the `MediaRecorder` to compress the whole video into 1/4 of its intended duration. The small `setTimeout` yield is still there — it just now matches the actual frame cadence.
+- **Future Note**: For faster-than-realtime export in the future, the right approach is `OffscreenCanvas` + a worker-based encoder (e.g. WebCodecs), not speeding up the `MediaRecorder` loop.
+```
+
+## Milestone: Satisfying the spec, achieved.

@@ -70,8 +70,9 @@ export async function exportWebM(
         renderFrame(ctx, exportCanvas, spec, images, t);
         onProgress?.(Math.round((frame / totalFrames) * 100));
 
-        // Yield to browser — keeps UI alive and gives captureStream time to sample
-        await new Promise<void>((r) => setTimeout(r, frameInterval / 4));
+        // Yield to browser at the correct frame cadence so MediaRecorder timestamps
+        // are wall-clock-accurate (captureStream records in real time).
+        await new Promise<void>((r) => setTimeout(r, frameInterval));
     }
 
     recorder.stop();
