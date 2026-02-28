@@ -111,13 +111,28 @@ Your job is to generate a MotionPlate sequence.json that creates a genuinely cin
 **chromaticAberration** — RGB channel shift. Digital decay, unreality, fracture. Use on tense/unstable moments.
 **screenShake** — Random pixel jitter with decay. Impact, trauma, explosion. USE AT MOST ONCE in entire sequence.
 
-## Transitions: Temporal Connectors
+## Transitions: Temporal & Spatial Connectors
 
-**crossfade** — Smooth alpha blend. Continuity, flowing time, connection. YOUR DEFAULT (use for 60%+ of transitions).
+### Alpha Transitions (opacity-based)
+**crossfade** — Dual-image alpha blend. Both plates visible simultaneously during transition. Continuity, flowing time, connection. YOUR DEFAULT — use for 50%+ of transitions.
 **fadeThroughBlack** — Out → black → in. Passage of time, section breaks, between distinct narrative movements.
 **fadeThroughWhite** — Out → white → in. Transcendence, revelation, awakening, breakthrough.
 **lightBleed** — Hold → bright flash → in. Divine intervention, overwhelming light. Use at most once.
 **cut** — Instant swap. Jarring shock, urgency, sudden tonal shift. Use for deliberate dramatic contrast.
+
+### Spatial Transitions (geometric — these break the slideshow feel)
+**wipeLeft** — Hard-edge left-to-right reveal. The incoming plate sweeps across, covering the outgoing. Use for: scene changes, chapter breaks, forward momentum, lateral progression. Transition duration 0.8–1.2s.
+**wipeDown** — Hard-edge top-to-bottom reveal. Incoming descends over outgoing. Use for: descent, unveiling, weight arriving, revelations dropping into frame. Transition duration 0.8–1.2s.
+**slideLeft** — Both plates slide laterally. Outgoing pushes off left, incoming enters from right. Use for: linear progression through time/space, parallel narratives, physical movement. Transition duration 0.8–1.5s.
+**zoomThrough** — Explosive zoom into outgoing plate + white flash → incoming settles. Maximum cinematic impact. USE AT MOST ONCE per sequence — save it for THE climactic transition. Transition duration 1.5–2.0s.
+
+### Transition Mix Guidelines
+- Use crossfade as your base (50%+ of transitions)
+- Use 2–3 spatial transitions per sequence to break monotony
+- Place wipeLeft/slideLeft at narrative turning points
+- Reserve zoomThrough for the single most dramatic moment
+- Use fadeThroughBlack between major narrative sections
+- Never use the same spatial transition twice in a row
 
 ## Pacing Rules
 
@@ -127,7 +142,7 @@ Your job is to generate a MotionPlate sequence.json that creates a genuinely cin
 - Revelatory/climactic beats: 4–6 seconds
 - Opening plate: 5–7s (establish the world)
 - Closing plate: 5–8s (let it breathe, resolve)
-- Transition durations: crossfade 0.8–1.5s, fades 1.2–2.0s, lightBleed 1.5–2.0s, cut 0
+- Transition durations: crossfade 0.8–1.5s, fades 1.2–2.0s, lightBleed 1.5–2.0s, wipes 0.8–1.2s, slideLeft 0.8–1.5s, zoomThrough 1.5–2.0s, cut 0
 
 ## Text Overlay Rules
 
