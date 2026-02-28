@@ -596,57 +596,24 @@ PS E:\co\MotionPlate> npm run test
 
 
  DEV  v4.0.18 E:/co/motionplate
-
- ✓ tests/engine/text.test.ts (11 tests) 18ms
- ✓ tests/engine/effects.test.ts (11 tests) 22ms
- ✓ tests/engine/renderer.test.ts (14 tests) 20ms
- ✓ tests/engine/transitions.test.ts (14 tests) 6ms
-stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
-🎬 [Director] Starting direction with MockAdapter...
-🎬 [Director] Parsing script...
-
-stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
-🎬 [Director] Extracted 1 beats.
-🎬 [Director] Mapping beats to 1 available images...
-
-stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
-🎬 [Director] Mapped all beats successfully.
-🎬 [Director] Generating spec sequence...
-
-stderr | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema                                                         
-⚠️ [Director] Initial generation failed: Schema validation failed:                                                     
-(root): must have required property 'meta'                                                                             
-(root): must have required property 'plates'                                                                           
-(root): must NOT have additional properties. Attempting 1 retry...                                                     
-                                                                                                                       
-stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema                                                         
-🎬 [Director] Successfully generated Sequence!                                                                         
-                                                                                                                       
- ✓ tests/director/director.test.ts (1 test) 7ms                                                                        
- ✓ tests/spec/spec.test.ts (24 tests) 14ms                                                                             
- ✓ src/test/basic.test.ts (1 test) 2ms                                                                                 
-                                                                                                                       
+--                                                                                             
  Test Files  7 passed (7)                                                                                              
       Tests  76 passed (76)                                                                                            
    Start at  02:00:46                                                                                                  
-   Duration  21.29s (transform 609ms, setup 10.07s, import 2.90s, tests 89ms, environment 69.40s)                      
-                                                                                                                       
- PASS  Waiting for file changes...
-       press h to show help, press q to quit
+   Duration  21.29s (transform 609ms, setup 10.07s, import 2.90s, tests 89ms, environment 69.40s)                                                                                                                         
 ```
 
+### Step 8: src/engine/transitions/index.ts — wire real composites
+- Full replace
+
+### Step 9: src/director/prompts.ts — update transition guide
+- Replaced the ## Transitions: Temporal Connectors section and add transition duration guidance for the new ones.
 
  Remaining Steps (8–11)
 
   ┌──────┬──────────────────────────────────────┬────────────────────────┐   
   │ Step │                 File                 │         Status         │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤            
-  │      │ transitions/index.ts — wire real fns │ Stubs in place, real   │   
-  │ 8    │  into composite registry             │ wiring pending steps   │   
-  │      │                                      │ 5–7                    │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤   
-  │ 9    │ prompts.ts — director guide          │ Not done               │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤                  
   │ 10   │ Tests                                │ Not done               │   
   ├──────┼──────────────────────────────────────┼────────────────────────┤   
   │ 11   │ Lint + build + gate                  │ Not done               │

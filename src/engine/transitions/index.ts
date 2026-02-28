@@ -1,18 +1,21 @@
 import type { TransitionFn, TransitionName, CompositeTransitionFn } from '../../spec/schema';
 import cut from './cut';
 import crossfade from './crossfade';
+import { crossfadeComposite } from './crossfade';
 import fadeThroughBlack from './fadeThroughBlack';
 import fadeThroughWhite from './fadeThroughWhite';
 import lightBleed from './lightBleed';
+import wipeLeft from './wipeLeft';
+import wipeDown from './wipeDown';
+import slideLeft from './slideLeft';
+import zoomThrough from './zoomThrough';
 
 /**
- * Transition registry — P1-20
+ * Transition registry — P1-20 + P4.7
  *
- * Overlay transitions: scalar (progress) => alpha
- * Composite transitions: (ctx, canvas, bufA, bufB, progress) => void
- *
- * The 4 new composite transitions (wipeLeft, wipeDown, slideLeft, zoomThrough)
- * are stubbed as crossfade until their files are created in Steps 5-7.
+ * Two registries:
+ *   - Overlay (scalar): single-plate + color overlay (fadeThroughBlack, etc.)
+ *   - Composite (dual-plate): both plates rendered to buffers, composited geometrically
  */
 
 // --- Overlay registry (scalar) ---
@@ -35,31 +38,16 @@ const COMPOSITE_NAMES = new Set<TransitionName>([
     'crossfade', 'wipeLeft', 'wipeDown', 'slideLeft', 'zoomThrough',
 ]);
 
-export function isCompositeTransition(name: TransitionName): boolean {
-    return COMPOSITE_NAMES.has(name);
-}
-
-// Stub: all composites fall back to alpha crossfade until real files land
-function crossfadeComposite(
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement,
-    outgoing: HTMLCanvasElement,
-    incoming: HTMLCanvasElement,
-    progress: number,
-): void {
-    ctx.globalAlpha = 1;
-    ctx.drawImage(outgoing, 0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = progress;
-    ctx.drawImage(incoming, 0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = 1;
+export function isCompositeTransition(name: TransitionName | string): boolean {
+    return COMPOSITE_NAMES.has(name as TransitionName);
 }
 
 const compositeRegistry: Record<string, CompositeTransitionFn> = {
     crossfade: crossfadeComposite,
-    wipeLeft: crossfadeComposite,
-    wipeDown: crossfadeComposite,
-    slideLeft: crossfadeComposite,
-    zoomThrough: crossfadeComposite,
+    wipeLeft,
+    wipeDown,
+    slideLeft,
+    zoomThrough,
 };
 
 export function getCompositeTransition(name: TransitionName): CompositeTransitionFn {
