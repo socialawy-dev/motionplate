@@ -147,3 +147,22 @@ describe('renderFrame', () => {
         expect(fillTextSpy).toHaveBeenCalled();
     });
 });
+
+// ─── Composite transition rendering ──────────────────────────────────────────
+
+describe('composite transition rendering', () => {
+    it('routes through composite path in transition zone (crossfade at plate boundary)', () => {
+        const canvas = makeCanvas();
+        const ctx = canvas.getContext('2d')!;
+        const img = makeImg();
+        const drawSpy = vi.spyOn(ctx, 'drawImage');
+
+        // testSequence: plate[0]=5s cut, plate[1]=4s crossfade td=1s, plate[2]=6s cut
+        // t=5.5 → plate[1] active, localTime=0.5 < td=1.0 → composite path
+        // crossfadeComposite draws outgoing buffer + incoming buffer onto main ctx
+        renderFrame(ctx, canvas, testSequence, [img, img, img], 5.5);
+
+        // At least 2 drawImage calls on main ctx: one per buffer from crossfadeComposite
+        expect(drawSpy.mock.calls.length).toBeGreaterThanOrEqual(2);
+    });
+});

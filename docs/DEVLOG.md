@@ -609,13 +609,20 @@ PS E:\co\MotionPlate> npm run test
 ### Step 9: src/director/prompts.ts — update transition guide
 - Replaced the ## Transitions: Temporal Connectors section and add transition duration guidance for the new ones.
 
- Remaining Steps (8–11)
+### Step 10: Tests + Lint + Build + Gate
 
-  ┌──────┬──────────────────────────────────────┬────────────────────────┐   
-  │ Step │                 File                 │         Status         │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤                  
-  │ 10   │ Tests                                │ Not done               │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤   
-  │ 11   │ Lint + build + gate                  │ Not done               │
-  └──────┴──────────────────────────────────────┴────────────────────────┘
+#### What was added this session:
+- 16 new tests in [transitions.test.ts](file:///e:/co/motionplate/tests/engine/transitions.test.ts) — covering `crossfadeComposite`, `wipeLeft`, `wipeDown`, `slideLeft`, `zoomThrough`, and the dual registry (`isCompositeTransition`, `getCompositeTransition`)
+- 1 new test in [renderer.test.ts](file:///e:/co/motionplate/tests/engine/renderer.test.ts) — composite path integration (crossfade at plate boundary)
+- `rect` and `clip` added to the canvas mock in [setup.ts](file:///e:/co/motionplate/tests/engine/setup.ts) (the 5 failures were all caused by their absence)
+
+Phase 4.7 gate is closed:
+- `tsc`        ✅  clean
+- `lint`       ✅  0 errors, 0 warnings
+- `build`      ✅  365 kB, 1.69s
+- `tests`      ✅  93/93 passed (7 files)
+
+---
+
+### Test drive
 
