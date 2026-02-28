@@ -535,9 +535,45 @@ Step 11: lint + tsc + build + full test gate
 
 ---
 
-### Phase 5 — Audio & Polish
+### Phase 5a — Persistence (do first)
 
-**Goal:** Audio sync slot, export quality, UX refinement.
+**Goal:** Save/load project state so golden test work survives reloads. Schema migration for existing 1.0.0 saves.
+
+| Task ID | Task | Input | Output | Test |
+|---------|------|-------|--------|------|
+| P5-10 | Project save/load (local) | Current state | IndexedDB persistence | Reload preserves work |
+| P5-11 | Recent projects | Saved projects | Project list | User can switch between projects |
+| P5-12 | Schema migration on load | Saved 1.0.0 project | Auto-upgraded to 1.1.0, no data loss | Load old save → 4 new transitions available |
+
+**Milestone:** Work survives browser reloads. Old saves load without errors.
+
+---
+
+### Phase 6a — Golden Standard Test (silent)
+
+**Goal:** Produce the Doxascope Prologue teaser without audio. Identify all real-world bugs before Phase 5b.
+
+> P4.7 context: 5 composite transitions now available (crossfade, wipeLeft, wipeDown, slideLeft, zoomThrough). Director cinematography prompt teaches them. Parser image-count cap means 22 images → up to 22 beats cleanly.
+
+| Task ID | Task | Input | Output | Test |
+|---------|------|-------|--------|------|
+| P6-01 | Load all 22 prologue artworks | Image files | 22 plates in sequence | All images loaded |
+| P6-02 | Map beats — Director + manual refinement | Script + 22 images | Populated sequence.json | Plates cover full prologue |
+| P6-03 | Apply effect assignments | Per-beat effect plan | Each plate has correct effect + spatial transitions exercised | Visual review per plate |
+| P6-04 | Apply text overlays | Prologue excerpts | Text appears with timing | Arabic + English text renders |
+| P6-05 | Apply transitions | Storyboard plan | Composite transitions look correct at scale | No jarring cuts where not intended |
+| P6-07 | Full preview review (silent) | — | 60-90 second continuous playback | Smooth, cinematic, no glitches |
+| P6-08 | Export silent WebM | — | .webm file | Plays in browser + VLC |
+| P6-09 | Director comparison: AI vs manual | Same script + images | Two sequences side by side | Cinematography quality comparison |
+| P6-10 | Document results + bug list | — | Test report | Bug list becomes P5b priority input |
+
+**Milestone:** Silent prologue teaser exported. Bug list locked. P5b scope confirmed.
+
+---
+
+### Phase 5b — Audio & Polish (informed by golden test)
+
+**Goal:** Audio sync, export resolution, and polish items prioritised by golden test findings.
 
 | Task ID | Task | Input | Output | Test |
 |---------|------|-------|--------|------|
@@ -545,34 +581,25 @@ Step 11: lint + tsc + build + full test gate
 | P5-02 | Audio playback sync | Audio + transport | Synced playback | Audio matches visual timeline |
 | P5-03 | Audio in export | Audio + canvas stream | WebM with audio track | Exported file has audio |
 | P5-04 | Export resolution selector | User choice | Canvas resizes for export | Export at 720p/1080p/4K |
-| P5-05 | Export time estimate | Spec + tier | "~45 seconds remaining" | Estimate within 20% of actual |
-| P5-06 | Export file size estimate | Spec + resolution + bitrate | "~12 MB" | Estimate within 30% |
-| P5-07 | Plate preview thumbnails | Image + effect | Static preview of effect | Thumbnail shows effect applied |
-| P5-08 | Effect preview on hover | Effect dropdown | Mini preview animation | User sees effect before selecting |
 | P5-09 | Toast notifications | System events | Non-blocking alerts | Export complete, save done, etc. |
-| P5-10 | Project save/load (local) | Current state | IndexedDB persistence | Reload preserves work |
-| P5-11 | Recent projects | Saved projects | Project list | User can switch between projects |
+| P5-13 | Export resolution + buffer resize | Resolution change event | Offscreen buffers A/B auto-resize with main canvas | Export at 1080p uses 1080p buffers, not 720p |
 
-**Milestone:** Production-ready tool with audio, polish, and persistence.
+> **Deferred to v1.5:** P5-05 (export time estimate), P5-06 (file size estimate) — effort vs value poor; export already shows progress %.
+> **Cut:** P5-07 (plate preview thumbnails), P5-08 (effect preview on hover) — high effort, minimal impact; users preview on the canvas.
+
+**Milestone:** Audio sync works. Export resolution correct end-to-end including composite buffers.
 
 ---
 
-### Phase 6 — Golden Standard Test
+### Phase 6b — Golden Standard Test (final)
 
-**Goal:** Produce the Doxascope Prologue teaser using every feature.
+**Goal:** Add audio, final review, final 1080p export.
 
 | Task ID | Task | Input | Output | Test |
 |---------|------|-------|--------|------|
-| P6-01 | Load all 22 prologue artworks | Image files | 22 plates in sequence | All images loaded |
-| P6-02 | Map 12 beats from storyboard | Beat plan from discussion | Populated sequence.json | Plates match storyboard timing |
-| P6-03 | Apply effect assignments | Per-beat effect plan | Each plate has correct effect | Visual review per plate |
-| P6-04 | Apply text overlays | Prologue excerpts | Text appears with timing | Arabic + English text renders |
-| P6-05 | Apply transitions | Storyboard transitions | Smooth plate-to-plate flow | No jarring cuts where not intended |
 | P6-06 | Add ambient audio track | .mp3 file | Synced audio | Audio matches visual pacing |
-| P6-07 | Full preview review | — | 60-90 second continuous playback | Smooth, cinematic, no glitches |
-| P6-08 | Export final WebM | — | High-quality .webm file | Plays in browser + VLC |
-| P6-09 | Test with LLM Director | Script text + images | Auto-generated sequence | Compare AI vs manual sequence |
-| P6-10 | Document results | — | Test report | Pass/fail per feature |
+| P6-07 | Full preview review with audio | — | 60-90 second continuous playback | Smooth, cinematic, no glitches |
+| P6-08 | Export final WebM at 1080p | — | High-quality .webm file | Plays in browser + VLC |
 
 **Milestone:** Finished Doxascope Prologue teaser video, produced entirely in the browser.
 
@@ -589,8 +616,11 @@ Each phase must pass its gate before the next phase begins:
 | P2 | **Schema Gate** | AJV validates schema, round-trip import/export works |
 | P3 | **UI Gate** | End-to-end: load images → compose → preview → export in browser |
 | P4 | **Director Gate** | LLM generates valid spec from prologue script + images |
-| P5 | **Production Gate** | Audio sync works, persistence works, all polish items done |
-| P6 | **Golden Gate** | Prologue teaser exported at 1080p, reviewed and approved |
+| P4.7 | **Composite Gate** | 93/93 tests, tsc + lint + build clean, composite transitions render correctly |
+| P5a | **Persistence Gate** | IndexedDB save/load works; 1.0.0 → 1.1.0 migration lossless |
+| P6a | **Silent Golden Gate** | 22-plate prologue renders and exports as silent WebM; bug list documented |
+| P5b | **Production Gate** | Audio sync works; export resolution correct end-to-end including buffers |
+| P6b | **Golden Gate** | Final prologue with audio exported at 1080p, reviewed and approved |
 
 ---
 
@@ -622,17 +652,20 @@ Detection runs once on app load. User can override via settings. Export shows es
 
 ## Estimated Timeline
 
-| Phase | Effort | Parallelizable |
-|-------|--------|----------------|
-| P0 — Scaffold | 1 day | No (foundation) |
-| P1 — Engine | 3-4 days | Tasks within phase can parallelize |
-| P2 — Schema | 1-2 days | Can overlap with late P1 |
-| P3 — Composer | 3-4 days | Requires P1 + P2 complete |
-| P4 — Director | 2-3 days | Can start after P2 (no UI dependency) |
-| P5 — Audio & Polish | 2-3 days | Requires P3 complete |
-| P6 — Golden Test | 1-2 days | Requires all phases complete |
+| Phase | Effort | Notes |
+|-------|--------|-------|
+| P0 — Scaffold | 1 day | Complete ✓ |
+| P1 — Engine | 3-4 days | Complete ✓ |
+| P2 — Schema | 1-2 days | Complete ✓ |
+| P3 — Composer | 3-4 days | Complete ✓ |
+| P4 — Director | 2-3 days | Complete ✓ |
+| P4.7 — Spatial Transitions | 1-2 days | Complete ✓ |
+| P5a — Persistence | ~1 day | Next |
+| P6a — Golden Test (silent) | ~2 days | Bugs surface here |
+| P5b — Audio & Polish | ~2 days | Scope informed by P6a |
+| P6b — Golden Test (final) | ~1 day | Final milestone |
 
-**Total: ~13-19 days** with solo + agent dev, depending on parallelization.
+**Completed: ~13-19 days.** **Remaining: ~6 days.**
 
 ---
 
@@ -644,6 +677,9 @@ These are acknowledged for architectural awareness, not for implementation:
 |---------|---------|-------|
 | v1.5 | FFmpeg WASM for MP4 export | Replace MediaRecorder dependency |
 | v1.5 | Multi-track audio | VO + ambient + SFX layering |
+| v1.5 | Parallax depth layers (P7-01) | Fake depth: zoom + offset + blur duplicate on a second canvas layer |
+| v1.5 | Soft-edge wipes (P7-03) | Feathered wipe transitions using gradient masks instead of hard clip-rect |
+| v2.0 | Video generation adapter (P7-02) | Interface for Runway / Kling / SVD — generate video clips from plates |
 | v2.0 | VideoFormation blueprint bridge | Map VF blueprint → MotionPlate spec |
 | v2.0 | VOID Engine handoff | Export spec for native rendering |
 | v2.0 | Remotion export | Server-side rendering pipeline |

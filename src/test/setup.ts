@@ -26,6 +26,8 @@ function makeCtxMock() {
         rotate: vi.fn(),
         scale: vi.fn(),
         beginPath: vi.fn(),
+        rect: vi.fn(),
+        clip: vi.fn(),
         arc: vi.fn(),
         fill: vi.fn(),
         stroke: vi.fn(),
