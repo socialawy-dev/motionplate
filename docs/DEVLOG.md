@@ -694,5 +694,54 @@ P5b.
 
 ---
 
-## Interactive Timeline
-TASK4.md
+## Active Frame Highlight During Playback (TASK4)
+### Summary
+
+Implemented visual tracking of the active plate during playback. The sidebar now highlights the plate corresponding to the current playback time and automatically scrolls it into view.
+
+### Changes Made
+
+| File | Changes |
+|------|---------|
+| [PlateList.tsx](file:///e:/co/motionplate/src/composer/PlateList.tsx) | Integrated `usePlaybackStore` to compute `activePlateIdx`. Added `useEffect` for auto-scrolling the active plate into view using `scrollIntoView({ behavior: 'smooth', block: 'nearest' })`. |
+| [style.css](file:///e:/co/motionplate/src/style.css) | Added `.plate-item--active` CSS class for the highlight outline. |
+
+### Key Design Decisions
+
+- **Computed Index**: `activePlateIdx` is calculated by summing plate durations and comparing against `currentTime`.
+- **Conditional Scroll**: Scrolling only triggers when `isPlaying` is true to prevent unexpected jumps while the user is manually editing or selecting plates.
+- **Ref Management**: Used an array of refs (`itemRefs`) to target specific plate elements for scrolling.
+
+### Active Plate Styling
+Added visual highlight for the active plate in the sidebar.
+
+#### src/style.css
+```css
+.plate-item--active {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+```
+
+#### Verification
+- `tsc` ✅ Clean
+- `lint` ❌ Failed (30+ pre-existing errors in `scripts/validate-spec.ts`)
+
+● These lint errors are pre-existing (not from current changes). 
+
+### Summary of changes:                          
+  - src/composer/PlateList.tsx — Added useEffect, useMemo imports +          
+  usePlaybackStore; computed activePlateIdx from currentTime; added itemRefs
+  for DOM refs; auto-scroll effect (only fires during playback); applied
+  plate-item--active class and attached ref to each item.
+  - src/style.css — Added .plate-item--active with a 2px accent outline      
+  (non-layout-disrupting, coexists with the selected background).
+
+#### Verification Results
+
+| Gate | Result |
+|------|--------|
+| `npx tsc --noEmit` | ✅ Clean |
+| `npm run lint` | ⚠️ 7 pre-existing errors (unrelated to changes) |
+| `npx vitest run` | ✅ 108/108 tests pass |
+```

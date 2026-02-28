@@ -21,3 +21,7 @@ CPU/GPU cost	Negligible
 Visual payoff	High — makes the composer feel alive and professional
 It's one of those features with a huge UX payoff for almost no cost.
 ![alt text](image-7.png)
+
+--
+
+![alt text](image-8.png)

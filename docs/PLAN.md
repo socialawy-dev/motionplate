@@ -535,7 +535,7 @@ Step 11: lint + tsc + build + full test gate
 
 ---
 
-### Phase 5a — Persistence (do first)
+### Phase 5a — Persistence (do first) (x)
 
 **Goal:** Save/load project state so golden test work survives reloads. Schema migration for existing 1.0.0 saves.
 
@@ -546,6 +546,62 @@ Step 11: lint + tsc + build + full test gate
 | P5-12 | Schema migration on load | Saved 1.0.0 project | Auto-upgraded to 1.1.0, no data loss | Load old save → 4 new transitions available |
 
 **Milestone:** Work survives browser reloads. Old saves load without errors.
+
+---
+
+### Plan: Active Frame Highlight During Playback (TASK4)
+
+**Goal:** Highlight the currently playing plate in the sidebar and auto-scroll to keep it in view during playback.
+
+| Task ID | Task | Input | Output | Test |
+|---------|------|-------|--------|------|
+| T4-01 | Compute active plate index | `currentTime`, `plates` | `activePlateIdx` via `useMemo` | Index updates as playback progresses |
+| T4-02 | Implement auto-scroll | `isPlaying`, `itemRefs` | `useEffect` calling `scrollIntoView` | Sidebar follows playback automatically |
+| T4-03 | Active state styling | `activePlateIdx` | `.plate-item--active` CSS class | Distinct visual outline on active plate |
+
+#### Implementation Details
+
+**src/composer/PlateList.tsx**
+- Subscribe to `usePlaybackStore` for `currentTime` and `isPlaying`.
+- Maintain a ref array: `const itemRefs = useRef<(HTMLDivElement | null)[]>([]);`.
+- Compute `activePlateIdx` by iterating through plate durations relative to `currentTime`.
+- Trigger `scrollIntoView({ behavior: 'smooth', block: 'nearest' })` inside a `useEffect` when `activePlateIdx` changes (only if `isPlaying` is true).
+
+**src/style.css**
+```css
+.plate-item--active {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+```
+
+**Milestone:** The PlateList sidebar provides real-time visual feedback of the playback position without manual scrolling.
+
+ ┌────────────────────────────┬──────────────────────────────────────────┐   
+ │            File            │                  Change                  │   
+ ├────────────────────────────┼──────────────────────────────────────────┤   
+ │                            │ Subscribe to usePlaybackStore, compute   │   
+ │ src/composer/PlateList.tsx │ activePlateIdx, add refs, add CSS class, │   
+ │                            │  add scroll effect                       │   
+ ├────────────────────────────┼──────────────────────────────────────────┤   
+ │ src/style.css              │ Add .plate-item--active rule             │   
+ └────────────────────────────┴──────────────────────────────────────────┘   
+
+- Imports to Add
+
+ - usePlaybackStore from ../store/playback (already imported in
+ Transport/PreviewCanvas — same pattern)
+ - useMemo, useRef, useEffect from react (check if already imported)
+
+ Verification
+
+ 1. npm run dev → open composer, add 2+ plates, hit play → active frame      
+ should glow purple and sidebar should scroll to follow
+ 2. Pause mid-playback → highlight stays on paused frame; manual scrub in    
+ Transport → highlight updates in real time (no auto-scroll)
+ 3. tsc → no type errors
+ 4. npm run lint → 0 warnings
+ 5. npm test → all 93 tests still pass (no logic changes, pure UI addition) 
 
 ---
 
