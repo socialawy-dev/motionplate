@@ -744,4 +744,11 @@ Added visual highlight for the active plate in the sidebar.
 | `npx tsc --noEmit` | ✅ Clean |
 | `npm run lint` | ⚠️ 7 pre-existing errors (unrelated to changes) |
 | `npx vitest run` | ✅ 108/108 tests pass |
-```
+
+### Applying to `PlateEditor.tsx`
+ - Subscribed to currentTime and isPlaying from usePlaybackStore
+  - Computed activePlateIdx (same loop as PlateList)                           - const displayIdx = isPlaying ? activePlateIdx : selectedPlateIdx — when  
+  playing, the panel tracks the active frame; when paused/stopped, it shows    the selected plate                                                         
+  - All mutation handlers (updatePlate, setEffect, setTransition, togglePost)
+   now target displayIdx, so any edits during playback apply to the correct
+  plate
