@@ -3,7 +3,9 @@
  * Right panel: all controls for the selected plate.
  */
 
+import { useMemo } from 'react';
 import { useProjectStore } from '../store/project';
+import { usePlaybackStore } from '../store/playback';
 import type { EffectName, TransitionName, PostEffectName } from '../spec/schema';
 
 const EFFECTS: EffectName[] = ['kenBurns', 'pulse', 'drift', 'rotate', 'static'];
@@ -36,7 +38,20 @@ export default function PlateEditor() {
     const setTransition = useProjectStore((s) => s.setTransition);
     const togglePost = useProjectStore((s) => s.togglePost);
 
-    const plate = plates[selectedPlateIdx];
+    const currentTime = usePlaybackStore((s) => s.currentTime);
+    const isPlaying   = usePlaybackStore((s) => s.isPlaying);
+
+    const activePlateIdx = useMemo(() => {
+        let elapsed = 0;
+        for (let i = 0; i < plates.length; i++) {
+            elapsed += plates[i].duration;
+            if (currentTime < elapsed) return i;
+        }
+        return plates.length - 1;
+    }, [plates, currentTime]);
+
+    const displayIdx = isPlaying ? activePlateIdx : selectedPlateIdx;
+    const plate = plates[displayIdx];
 
     if (!plate) {
         return (
@@ -56,7 +71,7 @@ export default function PlateEditor() {
                 <input
                     id="plate-duration" type="number" className="editor-input"
                     min={0.1} step={0.5} value={plate.duration}
-                    onChange={(e) => updatePlate(selectedPlateIdx, { duration: Number(e.target.value) })}
+                    onChange={(e) => updatePlate(displayIdx, { duration: Number(e.target.value) })}
                 />
             </section>
 
@@ -65,7 +80,7 @@ export default function PlateEditor() {
                 <label className="editor-label" htmlFor="plate-effect">Motion Effect</label>
                 <select
                     id="plate-effect" className="editor-select" value={plate.effect}
-                    onChange={(e) => setEffect(selectedPlateIdx, e.target.value as EffectName)}
+                    onChange={(e) => setEffect(displayIdx, e.target.value as EffectName)}
                 >
                     {EFFECTS.map((ef) => <option key={ef} value={ef}>{EFFECT_LABELS[ef]}</option>)}
                 </select>
@@ -81,7 +96,7 @@ export default function PlateEditor() {
                             <button
                                 key={pf}
                                 className={`toggle-btn ${active ? 'toggle-btn--on' : ''}`}
-                                onClick={() => togglePost(selectedPlateIdx, pf)}
+                                onClick={() => togglePost(displayIdx, pf)}
                                 aria-pressed={active}
                                 aria-label={`Toggle ${POST_LABELS[pf]}`}
                             >
@@ -97,7 +112,7 @@ export default function PlateEditor() {
                 <label className="editor-label" htmlFor="plate-transition">Transition</label>
                 <select
                     id="plate-transition" className="editor-select" value={plate.transition}
-                    onChange={(e) => setTransition(selectedPlateIdx, e.target.value as TransitionName)}
+                    onChange={(e) => setTransition(displayIdx, e.target.value as TransitionName)}
                 >
                     {TRANSITIONS.map((tr) => <option key={tr} value={tr}>{TRANSITION_LABELS[tr]}</option>)}
                 </select>
@@ -109,7 +124,7 @@ export default function PlateEditor() {
                             id="plate-trans-dur" type="number" className="editor-input"
                             min={0} max={plate.duration} step={0.1}
                             value={plate.transitionDuration ?? 1}
-                            onChange={(e) => updatePlate(selectedPlateIdx, { transitionDuration: Number(e.target.value) })}
+                            onChange={(e) => updatePlate(displayIdx, { transitionDuration: Number(e.target.value) })}
                         />
                     </>
                 )}
@@ -122,7 +137,7 @@ export default function PlateEditor() {
                     id="plate-text" className="editor-textarea" rows={3}
                     value={plate.text ?? ''}
                     placeholder="Optional text overlay..."
-                    onChange={(e) => updatePlate(selectedPlateIdx, { text: e.target.value })}
+                    onChange={(e) => updatePlate(displayIdx, { text: e.target.value })}
                 />
 
                 {plate.text && (
@@ -131,7 +146,7 @@ export default function PlateEditor() {
                         <select
                             id="plate-text-pos" className="editor-select"
                             value={plate.textConfig?.position ?? 'center'}
-                            onChange={(e) => updatePlate(selectedPlateIdx, {
+                            onChange={(e) => updatePlate(displayIdx, {
                                 textConfig: { ...plate.textConfig, position: e.target.value as 'top' | 'center' | 'bottom' },
                             })}
                         >
@@ -145,7 +160,7 @@ export default function PlateEditor() {
                             id="plate-font-size" type="number" className="editor-input"
                             min={8} max={200}
                             value={plate.textConfig?.fontSize ?? 28}
-                            onChange={(e) => updatePlate(selectedPlateIdx, {
+                            onChange={(e) => updatePlate(displayIdx, {
                                 textConfig: { ...plate.textConfig, fontSize: Number(e.target.value) },
                             })}
                         />
