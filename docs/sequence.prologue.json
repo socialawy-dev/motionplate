@@ -1,0 +1,676 @@
+{
+    "meta": {
+        "title": "Prologue: The Architecture of Coherence",
+        "fps": 30,
+        "width": 1920,
+        "height": 1080,
+        "schemaVersion": "1.1.0"
+    },
+    "plates": [
+        {
+            "id": "plate_1_void",
+            "duration": 6.0,
+            "effect": "drift",
+            "post": [
+                "vignette",
+                "particles"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "particles": {
+                    "count": 30
+                }
+            },
+            "transition": "fadeThroughBlack",
+            "transitionDuration": 2.0,
+            "text": "In the beginning, there was no beginning.",
+            "textConfig": {
+                "fontSize": 32,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_2_potential",
+            "duration": 5.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.1,
+                "panX": 0.01,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "There was potential. A density without dimension.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_3_coiled",
+            "duration": 5.5,
+            "effect": "rotate",
+            "effectConfig": {
+                "maxAngle": 1.0
+            },
+            "post": [
+                "vignette",
+                "fog"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                },
+                "fog": {
+                    "intensity": 0.1
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.2,
+            "text": "Something coiled in the fabric of what would become existence.",
+            "textConfig": {
+                "fontSize": 28,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_4_rupture",
+            "duration": 3.5,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.3,
+                "panX": 0.0,
+                "panY": 0.0,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "chromaticAberration"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.7
+                },
+                "chromaticAberration": {
+                    "intensity": 4.0
+                }
+            },
+            "transition": "zoomThrough",
+            "transitionDuration": 1.5,
+            "text": "Then: a rupture.",
+            "textConfig": {
+                "fontSize": 48,
+                "position": "center",
+                "fadeIn": 0.1,
+                "fadeOut": 0.1,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_5_particles",
+            "duration": 4.5,
+            "effect": "pulse",
+            "effectConfig": {
+                "frequency": 1.5,
+                "amplitude": 0.03
+            },
+            "post": [
+                "vignette",
+                "particles"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "particles": {
+                    "count": 80
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "In the searing aftermath, the first particles emerged.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_6_electron",
+            "duration": 6.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.1,
+                "endScale": 1.0,
+                "panX": -0.02,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "bloom"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                },
+                "bloom": {
+                    "intensity": 0.15
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "The electron did not wonder. It had no mind to wonder.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_7_tendency",
+            "duration": 5.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.15,
+                "panX": 0.03,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "wipeLeft",
+            "transitionDuration": 1.0,
+            "text": "A tendency toward Relation. It sought the proton.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_8_met",
+            "duration": 4.5,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.2,
+                "panY": -0.02,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "bloom"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                },
+                "bloom": {
+                    "intensity": 0.2
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "They met. They bound. The first relation. A unity.",
+            "textConfig": {
+                "fontSize": 32,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_9_hydrogen",
+            "duration": 6.0,
+            "effect": "static",
+            "post": [
+                "vignette",
+                "bloom"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "bloom": {
+                    "intensity": 0.3
+                }
+            },
+            "transition": "fadeThroughWhite",
+            "transitionDuration": 1.5,
+            "text": "The first hydrogen atom. Architecture of Coherence.",
+            "textConfig": {
+                "fontSize": 36,
+                "position": "center",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_10_clouds",
+            "duration": 7.0,
+            "effect": "drift",
+            "post": [
+                "vignette",
+                "fog"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                },
+                "fog": {
+                    "intensity": 0.15
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.2,
+            "text": "Hydrogen gathered into clouds so vast light took centuries to cross.",
+            "textConfig": {
+                "fontSize": 26,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_11_ignition",
+            "duration": 5.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.25,
+                "panX": 0.0,
+                "panY": 0.0,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "bloom"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "bloom": {
+                    "intensity": 0.5
+                }
+            },
+            "transition": "lightBleed",
+            "transitionDuration": 1.5,
+            "text": "Pressure built. Fusion ignited. The first stars burned.",
+            "textConfig": {
+                "fontSize": 32,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_12_supernova",
+            "duration": 5.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.3,
+                "endScale": 1.0,
+                "panX": 0.0,
+                "panY": 0.0,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "bloom",
+                "screenShake"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.7
+                },
+                "bloom": {
+                    "intensity": 0.3
+                },
+                "screenShake": {
+                    "intensity": 10
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.2,
+            "text": "They detonated, seeding the void with their creations.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_13_elements",
+            "duration": 5.5,
+            "effect": "rotate",
+            "effectConfig": {
+                "maxAngle": 1.5
+            },
+            "post": [
+                "vignette",
+                "particles"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "particles": {
+                    "count": 50
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "Hydrogen became carbon became oxygen became iron.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_14_planet",
+            "duration": 6.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.15,
+                "panX": 0.02,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "wipeLeft",
+            "transitionDuration": 1.2,
+            "text": "On one planet — unremarkable, mid-sized, third from its sun.",
+            "textConfig": {
+                "fontSize": 28,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_15_life",
+            "duration": 4.5,
+            "effect": "pulse",
+            "effectConfig": {
+                "frequency": 1.2,
+                "amplitude": 0.02
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "Molecules linked into chains. Some variations persisted.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_16_continuation",
+            "duration": 5.5,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.1,
+                "panX": 0.03,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "The same architecture of Coherence, playing out in carbon.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_17_awareness",
+            "duration": 4.5,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.2,
+                "panY": -0.01,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "chromaticAberration"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                },
+                "chromaticAberration": {
+                    "intensity": 1.5
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "Cells became organisms. Awareness became troubled.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_18_stargazer",
+            "duration": 6.5,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.15,
+                "panY": -0.03,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.5
+                }
+            },
+            "transition": "wipeDown",
+            "transitionDuration": 1.2,
+            "text": "The first human did not see physics. They saw meaning.",
+            "textConfig": {
+                "fontSize": 32,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_19_questions",
+            "duration": 5.5,
+            "effect": "drift",
+            "post": [
+                "vignette",
+                "fog"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "fog": {
+                    "intensity": 0.15
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "Searching for patterns of meaning — stories, laws, gods.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_20_mist_edge",
+            "duration": 6.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.0,
+                "endScale": 1.15,
+                "panX": 0.01,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette",
+                "fog"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.6
+                },
+                "fog": {
+                    "intensity": 0.2
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.0,
+            "text": "The Mist had always been there. Coiled in the fabric.",
+            "textConfig": {
+                "fontSize": 30,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_21_full_mist",
+            "duration": 7.0,
+            "effect": "drift",
+            "post": [
+                "vignette",
+                "fog"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.7
+                },
+                "fog": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "fadeThroughBlack",
+            "transitionDuration": 2.0,
+            "text": "The question existence asks itself: Can your pattern hold?",
+            "textConfig": {
+                "fontSize": 32,
+                "position": "bottom",
+                "fadeIn": 0.2,
+                "fadeOut": 0.2,
+                "shadow": true
+            }
+        },
+        {
+            "id": "plate_22_logo",
+            "duration": 6.0,
+            "effect": "kenBurns",
+            "effectConfig": {
+                "startScale": 1.05,
+                "endScale": 1.0,
+                "panX": 0.0,
+                "anchor": "center"
+            },
+            "post": [
+                "vignette"
+            ],
+            "postConfig": {
+                "vignette": {
+                    "intensity": 0.4
+                }
+            },
+            "transition": "crossfade",
+            "transitionDuration": 1.5,
+            "text": "MotionPlate: A Story of Coherence Found and Lost.",
+            "textConfig": {
+                "fontSize": 36,
+                "position": "center",
+                "fadeIn": 0.5,
+                "fadeOut": 0.5,
+                "shadow": true
+            }
+        }
+    ]
+}
