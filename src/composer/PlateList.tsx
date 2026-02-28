@@ -3,8 +3,9 @@
  * Left panel: plate thumbnail strip with selection, reorder, duplicate, and delete.
  */
 
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useProjectStore } from '../store/project';
+import { usePlaybackStore } from '../store/playback';
 
 export default function PlateList() {
     // Individual selectors — avoids new-object-per-render Zustand bug
@@ -15,6 +16,25 @@ export default function PlateList() {
     const removePlate = useProjectStore((s) => s.removePlate);
     const duplicatePlate = useProjectStore((s) => s.duplicatePlate);
     const movePlate = useProjectStore((s) => s.movePlate);
+
+    const currentTime = usePlaybackStore((s) => s.currentTime);
+    const isPlaying   = usePlaybackStore((s) => s.isPlaying);
+
+    const activePlateIdx = useMemo(() => {
+        let elapsed = 0;
+        for (let i = 0; i < plates.length; i++) {
+            elapsed += plates[i].duration;
+            if (currentTime < elapsed) return i;
+        }
+        return plates.length - 1;
+    }, [plates, currentTime]);
+
+    const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    useEffect(() => {
+        if (!isPlaying) return;
+        itemRefs.current[activePlateIdx]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, [activePlateIdx, isPlaying]);
 
     const dragIdx = useRef<number | null>(null);
 
@@ -38,7 +58,8 @@ export default function PlateList() {
                 return (
                     <div
                         key={plate.id}
-                        className={`plate-item ${isSelected ? 'plate-item--selected' : ''}`}
+                        className={`plate-item${isSelected ? ' plate-item--selected' : ''}${idx === activePlateIdx ? ' plate-item--active' : ''}`}
+                        ref={(el) => { itemRefs.current[idx] = el; }}
                         draggable
                         onDragStart={() => handleDragStart(idx)}
                         onDragOver={(e) => e.preventDefault()}

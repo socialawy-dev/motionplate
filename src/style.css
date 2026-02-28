@@ -201,6 +201,10 @@ input, select, textarea { font: inherit; color: inherit; background: none; borde
   border-color: var(--accent);
   background: var(--accent-dim);
 }
+.plate-item--active {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 
 .plate-item__thumb {
   width: 44px;
