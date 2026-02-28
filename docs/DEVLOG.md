@@ -586,13 +586,61 @@ src/engine/transitions/wipeLeft.ts — NEW
 src/engine/transitions/wipeDown.ts — NEW
 src/engine/transitions/slideLeft.ts — NEW
 
- Remaining Steps (7–11)
+### Step 7: src/engine/transitions/zoomThrough.ts — NEW
+-The most complex one. Three phases:
+```bash
+PS E:\co\MotionPlate> npm run test
+
+> motionplate-app@0.0.0 test
+> vitest
+
+
+ DEV  v4.0.18 E:/co/motionplate
+
+ ✓ tests/engine/text.test.ts (11 tests) 18ms
+ ✓ tests/engine/effects.test.ts (11 tests) 22ms
+ ✓ tests/engine/renderer.test.ts (14 tests) 20ms
+ ✓ tests/engine/transitions.test.ts (14 tests) 6ms
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Starting direction with MockAdapter...
+🎬 [Director] Parsing script...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Extracted 1 beats.
+🎬 [Director] Mapping beats to 1 available images...
+
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema
+🎬 [Director] Mapped all beats successfully.
+🎬 [Director] Generating spec sequence...
+
+stderr | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema                                                         
+⚠️ [Director] Initial generation failed: Schema validation failed:                                                     
+(root): must have required property 'meta'                                                                             
+(root): must have required property 'plates'                                                                           
+(root): must NOT have additional properties. Attempting 1 retry...                                                     
+                                                                                                                       
+stdout | tests/director/director.test.ts > Director Orchestrator > should successfully orchestrate parsing, mapping, and sequence generation with exactly one retry on invalid schema                                                         
+🎬 [Director] Successfully generated Sequence!                                                                         
+                                                                                                                       
+ ✓ tests/director/director.test.ts (1 test) 7ms                                                                        
+ ✓ tests/spec/spec.test.ts (24 tests) 14ms                                                                             
+ ✓ src/test/basic.test.ts (1 test) 2ms                                                                                 
+                                                                                                                       
+ Test Files  7 passed (7)                                                                                              
+      Tests  76 passed (76)                                                                                            
+   Start at  02:00:46                                                                                                  
+   Duration  21.29s (transform 609ms, setup 10.07s, import 2.90s, tests 89ms, environment 69.40s)                      
+                                                                                                                       
+ PASS  Waiting for file changes...
+       press h to show help, press q to quit
+```
+
+
+ Remaining Steps (8–11)
 
   ┌──────┬──────────────────────────────────────┬────────────────────────┐   
   │ Step │                 File                 │         Status         │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤      
-  │ 7    │ zoomThrough.ts                       │ Not created            │   
-  ├──────┼──────────────────────────────────────┼────────────────────────┤   
+  ├──────┼──────────────────────────────────────┼────────────────────────┤            
   │      │ transitions/index.ts — wire real fns │ Stubs in place, real   │   
   │ 8    │  into composite registry             │ wiring pending steps   │   
   │      │                                      │ 5–7                    │   
