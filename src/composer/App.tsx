@@ -1,10 +1,11 @@
 /**
- * App — P3-01
+ * App — P3-01 + P5-10
  * Root layout: header + 3-panel composer + footer.
  * Also wires:
  *   - Ctrl+Z / Ctrl+Y undo/redo (P3-17)
  *   - Hardware tier detection on mount (P3-18)
  *   - Settings mode tab switching
+ *   - IndexedDB project restore on mount (P5-10)
  */
 
 import { useEffect } from 'react';
@@ -16,6 +17,7 @@ import PlateEditor from './PlateEditor';
 import SpecView from './SpecView';
 import ExportBar from './ExportBar';
 import DirectorPanel from './DirectorPanel';
+import ProjectPicker from './ProjectPicker';
 import { useProjectStore } from '../store/project';
 import { useSettingsStore } from '../store/settings';
 import { detectHardwareTier } from '../engine/profiler';
@@ -25,6 +27,8 @@ export default function App() {
     const undo = useProjectStore((s) => s.undo);
     const redo = useProjectStore((s) => s.redo);
     const platesLength = useProjectStore((s) => s.spec.plates.length);
+    const initFromLastProject = useProjectStore((s) => s.initFromLastProject);
+    const isLoading = useProjectStore((s) => s.isLoading);
 
     const activeMode = useSettingsStore((s) => s.activeMode);
     const setActiveMode = useSettingsStore((s) => s.setActiveMode);
@@ -37,6 +41,11 @@ export default function App() {
         const result = detectHardwareTier();
         setTier(result.tier);
     }, [setTier]);
+
+    // Restore last project from IndexedDB on mount (P5-10)
+    useEffect(() => {
+        initFromLastProject();
+    }, [initFromLastProject]);
 
     // Undo/Redo keyboard shortcuts (P3-17)
     useEffect(() => {
@@ -68,6 +77,8 @@ export default function App() {
                     <span className="app__logo-text">MotionPlate</span>
                 </div>
 
+                <ProjectPicker />
+
                 <nav className="app__tabs" aria-label="Mode tabs">
                     {(['compose', 'preview', 'spec', 'director'] as const).map((mode) => (
                         <button
@@ -87,6 +98,13 @@ export default function App() {
 
                 <ExportBar />
             </header>
+
+            {/* ── Loading overlay ──────────────────────────────────── */}
+            {isLoading && (
+                <div className="app__loading">
+                    <span>Loading project…</span>
+                </div>
+            )}
 
             {/* ── Main 3-panel layout (compose mode) ─────────────── */}
             {activeMode === 'compose' && (

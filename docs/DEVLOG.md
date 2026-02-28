@@ -624,5 +624,45 @@ Phase 4.7 gate is closed:
 
 ---
 
-### Test drive
+## Phase 5a — Persistence Walkthrough
+
+### Summary
+
+Implemented full project persistence for MotionPlate using IndexedDB via the `idb` package. Projects (spec + images) survive browser reloads, and users can manage multiple projects.
+
+### Changes Made
+
+#### New Files
+
+| File | Purpose |
+|------|---------|
+| [migrate.ts](file:///e:/co/motionplate/src/spec/migrate.ts) | Schema migration pipeline (1.0.0 → 1.1.0). Extensible `MIGRATIONS` array for future versions |
+| [persistence.ts](file:///e:/co/motionplate/src/store/persistence.ts) | IndexedDB layer: save/load/list/delete projects, image ArrayBuffer serialization, app state tracking, storage estimation |
+| [ProjectPicker.tsx](file:///e:/co/motionplate/src/composer/ProjectPicker.tsx) | Dropdown UI in header for switching/creating/deleting projects with storage usage tip |
+| [persistence.test.ts](file:///e:/co/motionplate/tests/spec/persistence.test.ts) | 15 tests covering migration, round-trip persistence, listing, deletion, and utilities |
+
+#### Modified Files
+
+| File | Changes |
+|------|---------|
+| [project.ts](file:///e:/co/motionplate/src/store/project.ts) | Added `projectId`, 2s debounced auto-save, [saveNow](file:///e:/co/motionplate/src/store/project.ts#332-345), [loadProjectById](file:///e:/co/motionplate/src/store/project.ts#346-369), [createNewProject](file:///e:/co/motionplate/src/store/project.ts#370-386), [initFromLastProject](file:///e:/co/motionplate/src/store/project.ts#387-415), [refreshProjectList](file:///e:/co/motionplate/src/store/project.ts#418-426), [deleteProjectById](file:///e:/co/motionplate/src/store/project.ts#427-440) |
+| [App.tsx](file:///e:/co/motionplate/src/composer/App.tsx) | Wired [ProjectPicker](file:///e:/co/motionplate/src/composer/ProjectPicker.tsx#12-142) into header, added [initFromLastProject](file:///e:/co/motionplate/src/store/project.ts#387-415) on mount, loading overlay |
+| [style.css](file:///e:/co/motionplate/src/style.css) | Added styles for `.project-picker` dropdown and `.app__loading` overlay |
+| [package.json](file:///e:/co/motionplate/package.json) | Added `idb` (dep) and `fake-indexeddb` (dev dep) |
+
+### Key Design Decisions
+
+- **Auto-save**: 2-second debounce after every spec-mutating action. Module-level timer avoids React re-render overhead.
+- **Image storage**: `File → ArrayBuffer` on save, `ArrayBuffer → Blob → File → object URL → HTMLImageElement` on load. ~4.4 MB per project for prologue artworks.
+- **Migration**: Auto-upgrades on load + re-saves the migrated version so only one migration pass is needed per project.
+- **[deserializeImage](file:///e:/co/motionplate/src/store/persistence.ts#73-104) resilience**: Added 100ms timeout fallback for test environments where jsdom's `Image.onload` never fires.
+
+### Verification Results
+
+| Gate | Result |
+|------|--------|
+| `npx tsc --noEmit` | ✅ Clean |
+| `npm run lint` | ✅ Clean |
+| `npm run build` | ✅ 376 KB JS, 12.6 KB CSS |
+| `npx vitest run` | ✅ 108/108 tests pass (15 new) |
 

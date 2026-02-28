@@ -16,7 +16,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                    MotionPlate System                     │
+│                    MotionPlate System                    │
 ├──────────────┬──────────────────┬────────────────────────┤
 │  Layer 3     │   Layer 2        │   Layer 1              │
 │  COMPOSER    │   ENGINE         │   SPEC                 │
@@ -253,7 +253,7 @@ motionplate/
 
 ---
 
-### Phase 4 — LLM Director (Optional AI Layer)
+### Phase 4 — LLM Director (AI Layer) (x)
 
 **Goal:** Feed script text + images → get a composed sequence.json.
 
@@ -325,7 +325,7 @@ The director does NOT render — it only generates a spec. The engine renders it
 
 ---
 
-### Phase 4.7 — Spatial Transitions & Dual-Image Compositing
+### Phase 4.7 — Spatial Transitions & Dual-Image Compositing (x)
 
 > **Problem Statement**
 > Current transitions are alpha-only overlays on a single plate. The renderer draws one image, then overlays a colored rectangle (`rgba(0,0,0,alpha)`). Real crossfades need to draw both plates blended simultaneously, and spatial transitions (wipe, slide, zoom-through) need to position both plates geometrically.
@@ -541,7 +541,7 @@ Step 11: lint + tsc + build + full test gate
 
 | Task ID | Task | Input | Output | Test |
 |---------|------|-------|--------|------|
-| P5-10 | Project save/load (local) | Current state | IndexedDB persistence | Reload preserves work |
+| P5-10 | Project save/load (local) | Current state | IndexedDB persistence | Reload preserves work | (Study if Dexi.js is better?)
 | P5-11 | Recent projects | Saved projects | Project list | User can switch between projects |
 | P5-12 | Schema migration on load | Saved 1.0.0 project | Auto-upgraded to 1.1.0, no data loss | Load old save → 4 new transitions available |
 
@@ -626,15 +626,10 @@ Each phase must pass its gate before the next phase begins:
 
 ## Task Isolation Rules
 
-Each task is designed for independent execution by a local agent (Windsurf, VS Code Copilot, Antigravity, Jules). To maintain quality:
-
-1. **One task = one PR** — Each task ID maps to a branch and pull request
-2. **Tests before merge** — Every task has a defined test. Don't merge without passing it
-3. **No cross-phase dependencies in a single task** — If a task needs something from another phase, that's a blocker, not a subtask
-4. **Schema changes are versioned** — Any change to `sequence.schema.json` bumps the schema version
-5. **Engine has no UI imports** — `src/engine/` never imports from `src/composer/`
-6. **Spec has no engine imports** — `src/spec/` never imports from `src/engine/`
-7. **Director has no UI imports** — `src/director/` only imports from `src/spec/`
+1. **Schema changes are versioned** — Any change to `sequence.schema.json` bumps the schema version
+2. **Engine has no UI imports** — `src/engine/` never imports from `src/composer/`
+3. **Spec has no engine imports** — `src/spec/` never imports from `src/engine/`
+4. **Director has no UI imports** — `src/director/` only imports from `src/spec/`
 
 ---
 
@@ -660,12 +655,12 @@ Detection runs once on app load. User can override via settings. Export shows es
 | P3 — Composer | 3-4 days | Complete ✓ |
 | P4 — Director | 2-3 days | Complete ✓ |
 | P4.7 — Spatial Transitions | 1-2 days | Complete ✓ |
-| P5a — Persistence | ~1 day | Next |
+| P5a — Persistence | ~1 day | Complete ✓|
 | P6a — Golden Test (silent) | ~2 days | Bugs surface here |
 | P5b — Audio & Polish | ~2 days | Scope informed by P6a |
 | P6b — Golden Test (final) | ~1 day | Final milestone |
 
-**Completed: ~13-19 days.** **Remaining: ~6 days.**
+**Completed: ~13-19 days.** **Remaining: ~5 days.**
 
 ---
 
