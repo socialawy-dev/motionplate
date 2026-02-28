@@ -666,3 +666,33 @@ Implemented full project persistence for MotionPlate using IndexedDB via the `id
 | `npm run build` | ✅ 376 KB JS, 12.6 KB CSS |
 | `npx vitest run` | ✅ 108/108 tests pass (15 new) |
 
+--
+
+ ## docs/migration-analysis
+ Summary across all 4 projects analyzed:
+
+  ┌─────────────────┬────────────────────────────────────────────────────┐   
+  │     Project     │                      Verdict                       │   
+  ├─────────────────┼────────────────────────────────────────────────────┤   
+  │                 │ MIGRATE 3 components — WebCodecs+webm-muxer        │   
+  │ 3d-webmedia     │ export, AudioManager, offline audio mixing (all    │   
+  │                 │ for P5b)                                           │   
+  ├─────────────────┼────────────────────────────────────────────────────┤   
+  │ AutoStudio3D    │ Skip — less mature in every overlap                │   
+  ├─────────────────┼────────────────────────────────────────────────────┤   
+  │ AI Media        │ Skip — different domain entirely                   │   
+  │ Synthesizer     │                                                    │   
+  ├─────────────────┼────────────────────────────────────────────────────┤   
+  │ VirtuaStudio    │ Skip — MotionPlate's superseded ancestor           │   
+  │ Pro             │                                                    │   
+  └─────────────────┴────────────────────────────────────────────────────┘   
+
+- The only real prize is 3d-webmedia's export pipeline (webm-muxer +
+WebCodecs + OfflineAudioContext). That's the one concrete migration for    
+P5b.
+- However, I'm holding off AudioWorklet for now, as it's not a priority.
+
+---
+
+## Interactive Timeline
+TASK4.md
