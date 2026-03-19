@@ -250,9 +250,24 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             const [img] = images.splice(from, 1);
             plates.splice(to, 0, plate);
             images.splice(to, 0, img);
+            
+            // Update selectedPlateIdx to track the moved plate or adjust for position changes
+            let newSelectedPlateIdx = s.selectedPlateIdx;
+            if (s.selectedPlateIdx === from) {
+                // Selected plate is being moved
+                newSelectedPlateIdx = to;
+            } else if (from < s.selectedPlateIdx && to >= s.selectedPlateIdx) {
+                // Moving a plate from before selected to after selected
+                newSelectedPlateIdx = s.selectedPlateIdx - 1;
+            } else if (from > s.selectedPlateIdx && to <= s.selectedPlateIdx) {
+                // Moving a plate from after selected to before selected
+                newSelectedPlateIdx = s.selectedPlateIdx + 1;
+            }
+            
             const newState = {
                 spec: { ...s.spec, plates },
                 images,
+                selectedPlateIdx: newSelectedPlateIdx,
                 past: pushHistory(s.past, s.spec),
                 future: [],
             };
