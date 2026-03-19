@@ -763,3 +763,22 @@ Added visual highlight for the active plate in the sidebar.
 ```
 
 ## Milestone: Satisfying the spec, achieved.
+
+---
+
+## 2026-03-19: Drag and Drop Selection Fix
+
+**Issue**: Selection highlight didn't move when reordering plates via drag and drop.
+
+**Root cause**: The `movePlate` function in project store correctly moved plates and images but failed to update `selectedPlateIdx`, causing the visual selection to remain at the original index.
+
+**Fix**: Updated `movePlate` to properly track selection state:
+- When moving the selected plate: update `selectedPlateIdx` to new position
+- When moving other plates: adjust selected index based on position shifts
+- Maintains visual selection consistency during drag operations
+
+**Files changed**: `src/store/project.ts` (lines 245-276)
+
+**Testing**: Verified drag and drop now correctly maintains and updates selection highlight.
+
+---
