@@ -1,0 +1,55 @@
+name: Jules Issue Worker
+
+on:
+  issues:
+    types: [opened, labeled]
+  schedule:
+    - cron: '0 4 * * *' # Daily at 4 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  jules-work:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'needs-human-review'))
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Invoke Jules
+        uses: google-labs-code/jules-invoke@main
+        with:
+          jules_api_key: ${{ secrets.JULES_API_KEY }}
+          prompt: |
+            You are working on MotionPlate, a browser-based cinematic sequence builder.
+            Tech stack: React 19, Vite 7, TypeScript 5.9, Zustand 5, Tailwind 4, Vitest 4, IndexedDB (idb).
+
+            Architecture — strict isolation:
+            - src/engine/ — Canvas2D renderer, effects (Ken Burns, pulse, drift, rotate), transitions, post-effects. Never imports UI.
+            - src/spec/ — JSON schema + validation (Sequence, Plate types). Never imports Engine.
+            - src/composer/ — UI components (timeline, preview, editing). Writes spec, asks engine to preview.
+            - src/director/ — LLM-powered automation with provider adapters (Claude, Gemini, OpenAI, Ollama). Only imports Spec.
+            - src/store/ — Zustand state management.
+
+            Check the open GitHub issues and pick the next unassigned one to work on.
+
+            For each issue:
+            1. Read the issue description and acceptance criteria carefully.
+            2. Implement the feature or fix described.
+            3. Write tests (Vitest) for your changes.
+            4. Make sure existing tests still pass (npm test).
+            5. Run lint (npm run lint) and typecheck (npx tsc --noEmit).
+            6. Create a clean PR referencing the issue number (e.g. "Closes #N").
+
+            Do NOT modify .github/workflows/ files.
+            Do NOT change unrelated code.
+            Do NOT violate module isolation (Engine must not import UI, Director must not import Engine).
+            Keep PRs focused — one issue per PR.
