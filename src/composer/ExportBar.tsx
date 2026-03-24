@@ -12,6 +12,8 @@ export default function ExportBar() {
     // Individual selectors — avoids new-object-per-render Zustand bug
     const spec = useProjectStore((s) => s.spec);
     const images = useProjectStore((s) => s.images);
+    const saveNow = useProjectStore((s) => s.saveNow);
+    const isSaving = useProjectStore((s) => s.isSaving);
 
     const isExporting = usePlaybackStore((s) => s.isExporting);
     const exportProgress = usePlaybackStore((s) => s.exportProgress);
@@ -29,6 +31,9 @@ export default function ExportBar() {
         setExportProgress(0);
 
         try {
+            // Auto-save before export (P5-10)
+            await saveNow();
+
             const imgElements = images.map((e) => e.img);
             await exportAndDownload(spec, imgElements, {
                 onProgress: (progress: number) => {
@@ -51,6 +56,17 @@ export default function ExportBar() {
 
     return (
         <div className="export-bar">
+            {/* Save project button (P5-10) */}
+            <button
+                className="btn btn--secondary"
+                onClick={() => saveNow()}
+                disabled={isSaving || !spec.plates.length}
+                aria-label="Save project"
+                title="Save current project to browser storage"
+            >
+                {isSaving ? 'Saving…' : '💾 Save'}
+            </button>
+
             {/* Hardware tier badge (P3-18) */}
             <span
                 className="tier-badge"
