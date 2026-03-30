@@ -149,7 +149,7 @@ jobs:
             fi
             echo ""
             echo "---"
-            echo "*Automated review by Groq (Llama 3.3 70B)*"
+            echo "*Automated review by Groq (Llama 3 70B)*"
           } > /tmp/review_comment.txt
 
         env:
