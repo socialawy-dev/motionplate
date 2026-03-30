@@ -766,6 +766,31 @@ Added visual highlight for the active plate in the sidebar.
 
 ---
 
+## 2026-03-22 to 2026-03-25: Autonomous Pipeline Activity
+
+### Dependencies (Dependabot + Gemini auto-review)
+Cleared the full dependabot backlog — 14 PRs merged:
+- globals 17.3→17.4, eslint 9.39→10.0, undici 7.22→7.24 (security), @vitest/ui 4.0→4.1
+- @typescript-eslint/parser+plugin 8.56→8.57, zustand 5.0.11→5.0.12, jsdom 28→29
+- vite 7.3→8.0, @vitejs/plugin-react 5.1→6.0, actions/checkout 4→6
+- tailwindcss 4.2.1→4.2.2, @tailwindcss/postcss 4.2.1→4.2.2, eslint-plugin 8.57.0→8.57.1
+- Gemini correctly auto-approved minor bumps, escalated majors (Vite 8, ESLint 10, jsdom 29)
+
+### Features (Jules + Gemini)
+- **PR #23**: Manual save button + auto-save before export (closes #12) — Gemini APPROVED, merged 2026-03-24
+  - Added save button to ExportBar, auto-save triggers before any export
+  - Test file: `tests/composer/ExportBar.test.tsx`
+
+### Pipeline Issues
+- Transient Gemini API 403 on 2026-03-23 (4 simultaneous dependabot PRs hit rate limit)
+- Resolved by close/reopen retrigger on 2026-03-25; 3 remaining merged manually
+
+### Open Issues (Phase 5-6)
+- #13 Recent projects list, #14 Audio file slot, #15 Audio playback sync
+- #16 Audio in export, #17 Export resolution selector, #18 Load prologue artworks for golden test
+
+---
+
 ## 2026-03-19: Drag and Drop Selection Fix
 
 **Issue**: Selection highlight didn't move when reordering plates via drag and drop.
