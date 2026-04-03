@@ -5,7 +5,7 @@
  * Also shows storage usage tip per the user's request.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useProjectStore } from '../store/project';
 import { estimateStorageUsed, formatBytes } from '../store/persistence';
 
@@ -51,7 +51,7 @@ export default function ProjectPicker() {
         setIsOpen(false);
     };
 
-    const handleDelete = async (e: React.MouseEvent, id: string) => {
+    const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         e.stopPropagation();
         if (confirm('Delete this project? This cannot be undone.')) {
             await deleteProjectById(id);

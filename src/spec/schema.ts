@@ -138,6 +138,11 @@ export interface SequenceMeta {
 export interface Sequence {
   meta: SequenceMeta;
   plates: Plate[];
+  audio?: {
+    src: string;
+    offset?: number;
+    volume?: number;
+  };
 }
 
 // ——— Hardware Profiler ———————————————————————————————————————————————————

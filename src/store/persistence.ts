@@ -26,6 +26,7 @@ export interface StoredProject {
     id: string;
     spec: Sequence;
     images: StoredImage[];
+    audio?: StoredImage; // using StoredImage type for audio buffer as well
     createdAt: number;   // unix ms
     updatedAt: number;   // unix ms
 }
@@ -112,9 +113,11 @@ export async function saveProject(
     id: string,
     spec: Sequence,
     imageFiles: File[],
+    audioFile?: File | null,
 ): Promise<void> {
     const db = await getDB();
     const images: StoredImage[] = await Promise.all(imageFiles.map(serializeImage));
+    const audio = audioFile ? await serializeImage(audioFile) : undefined;
 
     const now = Date.now();
     const existing = await db.get('projects', id) as StoredProject | undefined;
@@ -123,6 +126,7 @@ export async function saveProject(
         id,
         spec,
         images,
+        ...(audio && { audio }),
         createdAt: existing?.createdAt ?? now,
         updatedAt: now,
     };
@@ -137,7 +141,7 @@ export async function saveProject(
  */
 export async function loadProject(
     id: string,
-): Promise<{ spec: Sequence; images: { file: File; url: string; img: HTMLImageElement }[]; migrated: boolean; fromVersion: string } | null> {
+): Promise<{ spec: Sequence; images: { file: File; url: string; img: HTMLImageElement }[]; audioFile: File | null; audioUrl: string | null; migrated: boolean; fromVersion: string } | null> {
     const db = await getDB();
     const stored = (await db.get('projects', id)) as StoredProject | undefined;
     if (!stored) return null;
@@ -158,13 +162,21 @@ export async function loadProject(
     // Reconstitute images
     const images = await Promise.all(stored.images.map(deserializeImage));
 
+    let audioFile: File | null = null;
+    let audioUrl: string | null = null;
+    if (stored.audio) {
+        const blob = new Blob([stored.audio.buffer], { type: stored.audio.type });
+        audioFile = new File([blob], stored.audio.name, { type: stored.audio.type });
+        audioUrl = URL.createObjectURL(blob);
+    }
+
     // If migrated, auto-save the upgraded version
     if (migrated) {
         const imageFiles = images.map((i) => i.file);
-        await saveProject(id, spec, imageFiles);
+        await saveProject(id, spec, imageFiles, audioFile);
     }
 
-    return { spec, images, migrated, fromVersion };
+    return { spec, images, audioFile, audioUrl, migrated, fromVersion };
 }
 
 /**
@@ -223,6 +235,9 @@ export async function estimateStorageUsed(): Promise<number> {
         total += JSON.stringify(p.spec).length;
         for (const img of p.images) {
             total += img.buffer.byteLength;
+        }
+        if (p.audio) {
+            total += p.audio.buffer.byteLength;
         }
     }
     return total;
