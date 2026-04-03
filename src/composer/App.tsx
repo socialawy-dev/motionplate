@@ -11,6 +11,7 @@
 import { useEffect } from 'react';
 import DropZone from './DropZone';
 import PlateList from './PlateList';
+import AudioPanel from './AudioPanel';
 import PreviewCanvas from './PreviewCanvas';
 import Transport from './Transport';
 import PlateEditor from './PlateEditor';
@@ -111,6 +112,7 @@ export default function App() {
                 <main className="app__main">
                     <aside className="panel panel--left">
                         <DropZone />
+                        <AudioPanel />
                         <PlateList />
                     </aside>
 

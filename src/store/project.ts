@@ -43,10 +43,10 @@ const SAVE_DEBOUNCE_MS = 2000;
 function debouncedSave(state: ProjectState) {
     if (_saveTimer) clearTimeout(_saveTimer);
     _saveTimer = setTimeout(() => {
-        const { projectId, spec, images } = state;
+        const { projectId, spec, images, audioFile } = state;
         if (!projectId) return;
         const files = images.map((e) => e.file);
-        dbSave(projectId, spec, files).then(() => {
+        dbSave(projectId, spec, files, audioFile).then(() => {
             setLastProjectId(projectId);
         }).catch((err) => {
             console.error('[MotionPlate] Auto-save failed:', err);
@@ -82,6 +82,10 @@ interface ProjectState {
     images: ImageEntry[];  // indexed by plate order
     selectedPlateIdx: number;
 
+    // P5-01: Audio
+    audioFile: File | null;
+    audioUrl: string | null;
+
     // History (undo/redo)
     past: Sequence[];
     future: Sequence[];
@@ -104,6 +108,11 @@ interface ProjectState {
     undo: () => void;
     redo: () => void;
     resetProject: () => void;
+
+    // P5-01: Audio actions
+    setAudio: (file: File) => void;
+    removeAudio: () => void;
+    updateAudioConfig: (patch: { volume?: number; offset?: number }) => void;
 
     // P5-10: persistence actions
     saveNow: () => Promise<void>;
@@ -133,6 +142,8 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     spec: DEFAULT_SPEC,
     images: [],
     selectedPlateIdx: 0,
+    audioFile: null,
+    audioUrl: null,
     past: [],
     future: [],
     recentProjects: [],
@@ -340,16 +351,72 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         }),
 
     resetProject: () =>
-        set({ spec: DEFAULT_SPEC, images: [], selectedPlateIdx: 0, past: [], future: [] }),
+        set((s) => {
+            if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+            return { spec: DEFAULT_SPEC, images: [], selectedPlateIdx: 0, audioFile: null, audioUrl: null, past: [], future: [] };
+        }),
+
+    // ─── P5-01: Audio actions ─────────────────────────────────────────────
+
+    setAudio: (file) =>
+        set((s) => {
+            if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+            const url = URL.createObjectURL(file);
+            const spec: Sequence = {
+                ...s.spec,
+                audio: { ...s.spec.audio, src: file.name },
+            };
+            const newState = {
+                audioFile: file,
+                audioUrl: url,
+                spec,
+                past: pushHistory(s.past, s.spec),
+                future: [],
+            };
+            debouncedSave({ ...s, ...newState } as ProjectState);
+            return newState;
+        }),
+
+    removeAudio: () =>
+        set((s) => {
+            if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+            const spec: Sequence = { ...s.spec };
+            delete spec.audio;
+            const newState = {
+                audioFile: null,
+                audioUrl: null,
+                spec,
+                past: pushHistory(s.past, s.spec),
+                future: [],
+            };
+            debouncedSave({ ...s, ...newState } as ProjectState);
+            return newState;
+        }),
+
+    updateAudioConfig: (patch) =>
+        set((s) => {
+            if (!s.spec.audio) return s;
+            const spec: Sequence = {
+                ...s.spec,
+                audio: { ...s.spec.audio, ...patch },
+            };
+            const newState = {
+                spec,
+                past: pushHistory(s.past, s.spec),
+                future: [],
+            };
+            debouncedSave({ ...s, ...newState } as ProjectState);
+            return newState;
+        }),
 
     // ─── P5-10: Persistence actions ───────────────────────────────────────
 
     saveNow: async () => {
-        const { projectId, spec, images } = get();
+        const { projectId, spec, images, audioFile } = get();
         set({ isSaving: true });
         try {
             const files = images.map((e) => e.file);
-            await dbSave(projectId, spec, files);
+            await dbSave(projectId, spec, files, audioFile);
             await setLastProjectId(projectId);
         } catch (err) {
             console.error('[MotionPlate] Manual save failed:', err);
@@ -364,14 +431,19 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             const result = await dbLoad(id);
             if (!result) return null;
 
-            set({
-                projectId: id,
-                spec: result.spec,
-                images: result.images,
-                selectedPlateIdx: 0,
-                past: [],
-                future: [],
-                isLoading: false,
+            set((s) => {
+                if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+                return {
+                    projectId: id,
+                    spec: result.spec,
+                    images: result.images,
+                    audioFile: result.audioFile,
+                    audioUrl: result.audioUrl,
+                    selectedPlateIdx: 0,
+                    past: [],
+                    future: [],
+                    isLoading: false,
+                };
             });
             await setLastProjectId(id);
             return { migrated: result.migrated, fromVersion: result.fromVersion };
@@ -384,13 +456,18 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
     createNewProject: () => {
         const newId = generateId();
-        set({
-            projectId: newId,
-            spec: { ...DEFAULT_SPEC, meta: { ...DEFAULT_SPEC.meta, title: 'Untitled Sequence' } },
-            images: [],
-            selectedPlateIdx: 0,
-            past: [],
-            future: [],
+        set((s) => {
+            if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+            return {
+                projectId: newId,
+                spec: { ...DEFAULT_SPEC, meta: { ...DEFAULT_SPEC.meta, title: 'Untitled Sequence' } },
+                images: [],
+                selectedPlateIdx: 0,
+                audioFile: null,
+                audioUrl: null,
+                past: [],
+                future: [],
+            };
         });
         // Auto-save the empty project so it appears in the project list
         dbSave(newId, DEFAULT_SPEC, []).then(() => {
@@ -406,13 +483,18 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             if (lastId) {
                 const result = await dbLoad(lastId);
                 if (result) {
-                    set({
-                        projectId: lastId,
-                        spec: result.spec,
-                        images: result.images,
-                        selectedPlateIdx: 0,
-                        past: [],
-                        future: [],
+                    set((s) => {
+                        if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+                        return {
+                            projectId: lastId,
+                            spec: result.spec,
+                            images: result.images,
+                            audioFile: result.audioFile,
+                            audioUrl: result.audioUrl,
+                            selectedPlateIdx: 0,
+                            past: [],
+                            future: [],
+                        };
                     });
                     if (result.migrated) {
                         console.info(
