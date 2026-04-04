@@ -19,6 +19,7 @@ import SpecView from './SpecView';
 import ExportBar from './ExportBar';
 import DirectorPanel from './DirectorPanel';
 import ProjectPicker from './ProjectPicker';
+import LandingPage from './LandingPage';
 import { useProjectStore } from '../store/project';
 import { useSettingsStore } from '../store/settings';
 import { detectHardwareTier } from '../engine/profiler';
@@ -123,10 +124,7 @@ export default function App() {
                                 <Transport />
                             </>
                         ) : (
-                            <div className="empty-state">
-                                <p className="empty-state__icon">🎬</p>
-                                <p className="empty-state__text">Add images to start composing</p>
-                            </div>
+                            <LandingPage />
                         )}
                     </section>
 

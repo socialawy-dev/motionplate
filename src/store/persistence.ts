@@ -37,6 +37,7 @@ export interface ProjectMeta {
     plateCount: number;
     createdAt: number;
     updatedAt: number;
+    hasThumbnail?: boolean;
 }
 
 // ─── DB setup ─────────────────────────────────────────────────────────────────
@@ -193,8 +194,22 @@ export async function listProjects(): Promise<ProjectMeta[]> {
             plateCount: p.spec.plates.length,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
+            hasThumbnail: p.images && p.images.length > 0,
         }))
         .sort((a, b) => b.updatedAt - a.updatedAt);
+}
+
+/**
+ * Loads just the first image of a project for thumbnail display.
+ */
+export async function loadProjectThumbnail(id: string): Promise<string | null> {
+    const db = await getDB();
+    const stored = (await db.get('projects', id)) as StoredProject | undefined;
+    if (!stored || !stored.images || stored.images.length === 0) return null;
+
+    const firstImg = stored.images[0];
+    const blob = new Blob([firstImg.buffer], { type: firstImg.type });
+    return URL.createObjectURL(blob);
 }
 
 /**
@@ -203,6 +218,14 @@ export async function listProjects(): Promise<ProjectMeta[]> {
 export async function deleteProject(id: string): Promise<void> {
     const db = await getDB();
     await db.delete('projects', id);
+}
+
+/**
+ * Clears all projects from IndexedDB.
+ */
+export async function clearAllProjects(): Promise<void> {
+    const db = await getDB();
+    await db.clear('projects');
 }
 
 // ─── App state ────────────────────────────────────────────────────────────────

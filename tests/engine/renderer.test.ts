@@ -105,6 +105,45 @@ describe('getTotalDuration', () => {
 // ─── renderFrame tests ────────────────────────────────────────────────────────
 
 describe('renderFrame', () => {
+    it('resizes internal buffers when canvas dimensions change (Export resolution)', () => {
+        const canvas1080p = document.createElement('canvas');
+        canvas1080p.width = 1920;
+        canvas1080p.height = 1080;
+        const ctx1080p = canvas1080p.getContext('2d')!;
+
+        const canvas4k = document.createElement('canvas');
+        canvas4k.width = 3840;
+        canvas4k.height = 2160;
+        const ctx4k = canvas4k.getContext('2d')!;
+
+        const img = makeImg();
+
+        // Sequence with a composite transition to force buffer usage
+        const compSequence: Sequence = {
+            ...testSequence,
+            plates: [
+                { id: 'p1', duration: 2, effect: 'static', transition: 'cut' },
+                { id: 'p2', duration: 2, effect: 'static', transition: 'crossfade', transitionDuration: 1 },
+            ]
+        };
+
+        // Render at t=2.5 to trigger composite path
+        renderFrame(ctx1080p, canvas1080p, compSequence, [img, img], 2.5);
+
+        // Spy on drawImage to observe the buffers passed into the composite function
+        const drawSpy = vi.spyOn(ctx4k, 'drawImage');
+
+        // Render again with 4K canvas
+        renderFrame(ctx4k, canvas4k, compSequence, [img, img], 2.5);
+
+        // Expect drawImage to be called with a canvas (the buffer) that matches the 4K dimensions
+        const bufferArgs = drawSpy.mock.calls.find(call => call[0] instanceof HTMLCanvasElement);
+        expect(bufferArgs).toBeDefined();
+        const buf = bufferArgs![0] as HTMLCanvasElement;
+        expect(buf.width).toBe(3840);
+        expect(buf.height).toBe(2160);
+    });
+
     it('does not throw with valid inputs', () => {
         const canvas = makeCanvas();
         const ctx = canvas.getContext('2d')!;

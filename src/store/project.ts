@@ -17,6 +17,7 @@ import {
     getLastProjectId,
     listProjects as dbListProjects,
     deleteProject as dbDelete,
+    clearAllProjects as dbClearAll,
     type ProjectMeta,
 } from './persistence';
 
@@ -124,6 +125,7 @@ interface ProjectState {
     recentProjects: ProjectMeta[];
     refreshProjectList: () => Promise<void>;
     deleteProjectById: (id: string) => Promise<void>;
+    clearRecentProjects: () => Promise<void>;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -532,6 +534,16 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             await get().refreshProjectList();
         } catch (err) {
             console.error('[MotionPlate] Failed to delete project:', err);
+        }
+    },
+
+    clearRecentProjects: async () => {
+        try {
+            await dbClearAll();
+            await get().refreshProjectList();
+            get().createNewProject();
+        } catch (err) {
+            console.error('[MotionPlate] Failed to clear projects:', err);
         }
     },
 }));
