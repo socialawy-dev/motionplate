@@ -6,6 +6,8 @@ export interface ExportOptions {
     bitrate?: number;
     /** Called each frame with progress 0→100 */
     onProgress?: (progress: number) => void;
+    /** Target resolution for export */
+    resolution?: '720p' | '1080p' | '4K';
 }
 
 /**
@@ -26,13 +28,27 @@ export async function exportWebM(
     images: HTMLImageElement[],
     options: ExportOptions = {},
 ): Promise<Blob> {
-    const { bitrate = 5_000_000, onProgress } = options;
-    const { fps, width, height } = spec.meta;
+    const { bitrate = 5_000_000, onProgress, resolution } = options;
+    const { fps } = spec.meta;
+
+    let targetWidth = spec.meta.width;
+    let targetHeight = spec.meta.height;
+
+    if (resolution === '720p') {
+        targetWidth = 1280;
+        targetHeight = 720;
+    } else if (resolution === '1080p') {
+        targetWidth = 1920;
+        targetHeight = 1080;
+    } else if (resolution === '4K') {
+        targetWidth = 3840;
+        targetHeight = 2160;
+    }
 
     // Offscreen canvas at target resolution
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = width;
-    exportCanvas.height = height;
+    exportCanvas.width = targetWidth;
+    exportCanvas.height = targetHeight;
     const ctx = exportCanvas.getContext('2d');
     if (!ctx) throw new Error('Could not obtain 2D context for export canvas');
 
