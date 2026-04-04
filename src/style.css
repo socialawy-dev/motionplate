@@ -522,6 +522,130 @@ input, select, textarea { font: inherit; color: inherit; background: none; borde
   transition: width .25s ease;
 }
 
+/* ── Landing Page (P5-11) ──────────────────────────────────────────────────── */
+
+.landing-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    background: var(--bg);
+    overflow-y: auto;
+}
+
+.landing-page__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.landing-page__header h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+}
+
+.landing-page__clear-btn {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.landing-page__clear-btn:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.landing-page__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.landing-page__card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-page__card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.landing-page__card-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.landing-page__card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.landing-page__card-placeholder {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+.landing-page__card-info {
+    padding: 12px;
+}
+
+.landing-page__card-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.landing-page__card-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.landing-page__card--new {
+    border-style: dashed;
+    background: transparent;
+}
+
+.landing-page__card--new:hover {
+    background: var(--surface);
+}
+
+.landing-page__card--new .landing-page__card-thumb {
+    background: transparent;
+    font-size: 3rem;
+    color: var(--text-dim);
+}
+
+.landing-page__card--new .landing-page__card-info h3 {
+    color: var(--text-dim);
+    text-align: center;
+}
+
 /* ── Empty state ───────────────────────────────────────────────────────────── */
 .empty-state {
   display: flex;
