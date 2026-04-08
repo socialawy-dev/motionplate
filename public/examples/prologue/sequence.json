@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "title": "Prologue Example",
+    "fps": 30,
+    "width": 1280,
+    "height": 720,
+    "schemaVersion": "1.0.0"
+  },
+  "plates": [
+    {
+      "id": "plate-01",
+      "duration": 4,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-02",
+      "duration": 5,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-03",
+      "duration": 3,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-04",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-05",
+      "duration": 5,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-06",
+      "duration": 3,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-07",
+      "duration": 4,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-08",
+      "duration": 5,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-09",
+      "duration": 3,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-10",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-11",
+      "duration": 5,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-12",
+      "duration": 3,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-13",
+      "duration": 4,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-14",
+      "duration": 5,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-15",
+      "duration": 3,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-16",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-17",
+      "duration": 5,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-18",
+      "duration": 3,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-19",
+      "duration": 4,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-20",
+      "duration": 5,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-21",
+      "duration": 3,
+      "effect": "static",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-22",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {
+        "startScale": 1,
+        "endScale": 1.1
+      },
+      "transition": "cut",
+      "transitionDuration": 0
+    }
+  ]
+}

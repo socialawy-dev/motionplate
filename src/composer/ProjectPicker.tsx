@@ -90,6 +90,19 @@ export default function ProjectPicker() {
                         </button>
                     </div>
 
+                    <div className="project-picker__examples">
+                        <button
+                            className="project-picker__example-btn"
+                            onClick={() => {
+                                useProjectStore.getState().loadExampleProject('prologue');
+                                setIsOpen(false);
+                            }}
+                            aria-label="Load Prologue Example"
+                        >
+                            Load Prologue Example
+                        </button>
+                    </div>
+
                     {isLoading && (
                         <div className="project-picker__loading">Loading…</div>
                     )}

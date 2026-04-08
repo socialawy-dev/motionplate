@@ -748,6 +748,33 @@ input, select, textarea { font: inherit; color: inherit; background: none; borde
 }
 .project-picker__new-btn:hover { background: var(--accent-hover); }
 
+.project-picker__examples {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.project-picker__example-btn {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: all var(--transition);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-picker__example-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--text-secondary);
+}
+
 .project-picker__loading,
 .project-picker__empty {
   padding: 16px 12px;
