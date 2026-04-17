@@ -63,6 +63,12 @@ export default function ProjectPicker() {
         setIsOpen(false);
     };
 
+    const handleLoadExample = async (name: string) => {
+        const loadExample = useProjectStore.getState().loadExample;
+        await loadExample(name);
+        setIsOpen(false);
+    };
+
     return (
         <div className="project-picker" ref={dropdownRef}>
             <button
@@ -81,13 +87,24 @@ export default function ProjectPicker() {
                 <div className="project-picker__dropdown" role="menu">
                     <div className="project-picker__header">
                         <span>Recent Projects</span>
-                        <button
-                            className="project-picker__new-btn"
-                            onClick={handleNew}
-                            aria-label="Create new project"
-                        >
-                            + New
-                        </button>
+                        <div className="project-picker__actions">
+                            <button
+                                className="project-picker__example-btn"
+                                onClick={() => handleLoadExample('prologue')}
+                                aria-label="Load Prologue Example"
+                                title="Load Prologue Example"
+                                style={{ marginRight: '8px' }}
+                            >
+                                🎨 Load Example
+                            </button>
+                            <button
+                                className="project-picker__new-btn"
+                                onClick={handleNew}
+                                aria-label="Create new project"
+                            >
+                                + New
+                            </button>
+                        </div>
                     </div>
 
                     {isLoading && (
