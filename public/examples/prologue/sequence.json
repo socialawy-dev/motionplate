@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "title": "Prologue Example",
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "schemaVersion": "1.1.0"
+  },
+  "plates": [
+    {
+      "id": "plate-01.png",
+      "duration": 4.189959342097264,
+      "effect": "kenBurns",
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-02.png",
+      "duration": 3.303210252829334,
+      "effect": "pulse",
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-03.png",
+      "duration": 3.5394835430873455,
+      "effect": "drift",
+      "transition": "wipeDown",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-04.png",
+      "duration": 3.3850189024019715,
+      "effect": "rotate",
+      "transition": "slideLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-05.png",
+      "duration": 4.282840684469688,
+      "effect": "static",
+      "transition": "zoomThrough",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-06.png",
+      "duration": 3.485870044026864,
+      "effect": "kenBurns",
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-07.png",
+      "duration": 4.5824137484020095,
+      "effect": "pulse",
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-08.png",
+      "duration": 3.2029337708580137,
+      "effect": "drift",
+      "transition": "cut",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-09.png",
+      "duration": 3.8278521844270825,
+      "effect": "rotate",
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-10.png",
+      "duration": 3.8865547193715413,
+      "effect": "static",
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-11.png",
+      "duration": 4.276459392097058,
+      "effect": "kenBurns",
+      "transition": "wipeDown",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-12.png",
+      "duration": 4.952612202581776,
+      "effect": "pulse",
+      "transition": "slideLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-13.png",
+      "duration": 3.9157622305052655,
+      "effect": "drift",
+      "transition": "zoomThrough",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-14.png",
+      "duration": 4.277884527376928,
+      "effect": "rotate",
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-15.png",
+      "duration": 4.441036089169751,
+      "effect": "static",
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-16.png",
+      "duration": 3.206711532169455,
+      "effect": "kenBurns",
+      "transition": "cut",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-17.png",
+      "duration": 3.377376215808297,
+      "effect": "pulse",
+      "transition": "crossfade",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-18.png",
+      "duration": 4.518982149974589,
+      "effect": "drift",
+      "transition": "wipeLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-19.png",
+      "duration": 3.309045275372888,
+      "effect": "rotate",
+      "transition": "wipeDown",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-20.png",
+      "duration": 4.216915248090466,
+      "effect": "static",
+      "transition": "slideLeft",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-21.png",
+      "duration": 4.898137404333735,
+      "effect": "kenBurns",
+      "transition": "zoomThrough",
+      "transitionDuration": 1
+    },
+    {
+      "id": "plate-22.png",
+      "duration": 4.180200336636336,
+      "effect": "pulse",
+      "transition": "fadeThroughBlack"
+    }
+  ]
+}

@@ -111,6 +111,7 @@ interface ProjectState {
     loadProjectById: (id: string) => Promise<{ migrated: boolean; fromVersion: string } | null>;
     createNewProject: () => void;
     initFromLastProject: () => Promise<void>;
+    loadExample: (name: string) => Promise<void>;
 
     // P5-11: project list
     recentProjects: ProjectMeta[];
@@ -425,6 +426,74 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             }
         } catch (err) {
             console.error('[MotionPlate] Init from last project failed:', err);
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
+    loadExample: async (name: string) => {
+        set({ isLoading: true });
+        try {
+            // 1. Fetch the sequence.json
+            const specRes = await fetch(`/examples/${name}/sequence.json`);
+            if (!specRes.ok) throw new Error(`Failed to load example spec: ${specRes.statusText}`);
+            const spec = (await specRes.json()) as Sequence;
+
+            // 2. Extract unique image IDs
+            const imageIds = Array.from(new Set(spec.plates.map((p) => p.id)));
+
+            // 3. Fetch images in parallel
+            const imagePromises = imageIds.map(async (id) => {
+                const res = await fetch(`/examples/${name}/${id}`);
+                if (!res.ok) throw new Error(`Failed to fetch image: ${id}`);
+                const blob = await res.blob();
+                const file = new File([blob], id, { type: blob.type || 'image/png' });
+                const url = URL.createObjectURL(file);
+
+                // Need to load the HTMLImageElement to fulfill ImageEntry contract
+                const img = new Image();
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = url;
+                });
+
+                return {
+                    id,
+                    file,
+                    url,
+                    img
+                };
+            });
+            const loadedImages = await Promise.all(imagePromises);
+
+            // Map the loaded images back to the order required by plates
+            const images: ImageEntry[] = spec.plates.map(p => {
+                 const entry = loadedImages.find(l => l.id === p.id);
+                 if (!entry) throw new Error(`Image not found for plate: ${p.id}`);
+                 return { file: entry.file, url: entry.url, img: entry.img };
+            });
+
+            // 4. Create new project in state
+            const newId = generateId();
+            set({
+                projectId: newId,
+                spec,
+                images,
+                selectedPlateIdx: 0,
+                past: [],
+                future: [],
+            });
+
+            // 5. Persist to DB
+            const files = images.map((e) => e.file);
+            await dbSave(newId, spec, files);
+            await setLastProjectId(newId);
+
+            // 6. Refresh UI list
+            await get().refreshProjectList();
+        } catch (err) {
+            console.error('[MotionPlate] Failed to load example:', err);
         } finally {
             set({ isLoading: false });
         }
