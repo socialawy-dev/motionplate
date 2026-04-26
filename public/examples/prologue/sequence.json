@@ -1,0 +1,165 @@
+{
+  "meta": {
+    "title": "Prologue Example",
+    "fps": 30,
+    "width": 1280,
+    "height": 720,
+    "schemaVersion": "1.1.0"
+  },
+  "plates": [
+    {
+      "id": "prologue-01",
+      "duration": 3.4554973211075604,
+      "effect": "pulse",
+      "transition": "cut",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-02",
+      "duration": 3.663252567535069,
+      "effect": "drift",
+      "transition": "wipeLeft",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-03",
+      "duration": 4.056444147199516,
+      "effect": "rotate",
+      "transition": "wipeDown",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-04",
+      "duration": 4.299549212254352,
+      "effect": "static",
+      "transition": "slideLeft",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-05",
+      "duration": 3.2956733747509994,
+      "effect": "kenBurns",
+      "transition": "zoomThrough",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-06",
+      "duration": 4.573263476544351,
+      "effect": "pulse",
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-07",
+      "duration": 4.849872827940188,
+      "effect": "drift",
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-08",
+      "duration": 4.723968260932445,
+      "effect": "rotate",
+      "transition": "lightBleed",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-09",
+      "duration": 3.41829252793417,
+      "effect": "static",
+      "transition": "crossfade",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-10",
+      "duration": 3.4361185719705936,
+      "effect": "kenBurns",
+      "transition": "cut",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-11",
+      "duration": 4.212795400427348,
+      "effect": "pulse",
+      "transition": "wipeLeft",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-12",
+      "duration": 4.391633777700958,
+      "effect": "drift",
+      "transition": "wipeDown",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-13",
+      "duration": 3.2121110430291506,
+      "effect": "rotate",
+      "transition": "slideLeft",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-14",
+      "duration": 4.023005764898535,
+      "effect": "static",
+      "transition": "zoomThrough",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-15",
+      "duration": 4.962733837707649,
+      "effect": "kenBurns",
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-16",
+      "duration": 4.801261096510692,
+      "effect": "pulse",
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-17",
+      "duration": 4.372441219257958,
+      "effect": "drift",
+      "transition": "lightBleed",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-18",
+      "duration": 4.7136165075515315,
+      "effect": "rotate",
+      "transition": "crossfade",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-19",
+      "duration": 3.5312443291914573,
+      "effect": "static",
+      "transition": "cut",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-20",
+      "duration": 3.1183427791604306,
+      "effect": "kenBurns",
+      "transition": "wipeLeft",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-21",
+      "duration": 4.392176627097723,
+      "effect": "pulse",
+      "transition": "wipeDown",
+      "transitionDuration": 0.5
+    },
+    {
+      "id": "prologue-22",
+      "duration": 3.4709740889946294,
+      "effect": "drift",
+      "transition": "slideLeft",
+      "transitionDuration": 0.5
+    }
+  ]
+}

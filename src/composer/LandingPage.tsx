@@ -45,6 +45,18 @@ export default function LandingPage() {
                         <h3>New Project</h3>
                     </div>
                 </div>
+                <div
+                    className="landing-page__card landing-page__card--example"
+                    onClick={() => useProjectStore.getState().loadExampleProject()}
+                    data-testid="load-example-card"
+                >
+                    <div className="landing-page__card-thumb">
+                        <span>✨</span>
+                    </div>
+                    <div className="landing-page__card-info">
+                        <h3>Load Prologue Example</h3>
+                    </div>
+                </div>
                 {displayProjects.map((p) => (
                     <div
                         key={p.id}
