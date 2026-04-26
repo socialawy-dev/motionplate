@@ -10,6 +10,7 @@
 import { create } from 'zustand';
 import type { Sequence, Plate, EffectName, TransitionName, PostEffectName, TextConfig } from '../spec/schema';
 import { createDefaultPlate, CURRENT_SCHEMA_VERSION } from '../spec/defaults';
+import { importSpecFromJSON } from '../spec/io';
 import {
     saveProject as dbSave,
     loadProject as dbLoad,
@@ -117,6 +118,9 @@ interface ProjectState {
     refreshProjectList: () => Promise<void>;
     deleteProjectById: (id: string) => Promise<void>;
     clearRecentProjects: () => Promise<void>;
+
+    // P6-01: Load prologue example
+    loadExampleProject: () => Promise<void>;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -452,6 +456,55 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             await get().refreshProjectList();
         } catch (err) {
             console.error('[MotionPlate] Failed to delete project:', err);
+        }
+    },
+
+
+    loadExampleProject: async () => {
+        set({ isLoading: true });
+        try {
+            const specRes = await fetch('/examples/prologue/sequence.json');
+            if (!specRes.ok) throw new Error('Failed to fetch prologue spec');
+            const specText = await specRes.text();
+            const spec = importSpecFromJSON(specText);
+
+            const images: ImageEntry[] = [];
+            for (let i = 1; i <= 22; i++) {
+                const num = i.toString().padStart(2, '0');
+                const imgRes = await fetch(`/examples/prologue/plate-${num}.png`);
+                if (!imgRes.ok) throw new Error(`Failed to fetch plate-${num}.png`);
+                const blob = await imgRes.blob();
+                const file = new File([blob], `plate-${num}.png`, { type: blob.type });
+                const url = URL.createObjectURL(file);
+
+                const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = () => reject(new Error(`Failed to load image for plate-${num}.png`));
+                    img.src = url;
+                });
+
+                images.push({ file, url, img });
+            }
+
+            const newId = generateId();
+            set({
+                projectId: newId,
+                spec,
+                images,
+                selectedPlateIdx: 0,
+                past: [],
+                future: [],
+                isLoading: false,
+            });
+
+            const files = images.map((e) => e.file);
+            await dbSave(newId, spec, files);
+            await setLastProjectId(newId);
+            await get().refreshProjectList();
+        } catch (err) {
+            console.error('[MotionPlate] Failed to load prologue example:', err);
+            set({ isLoading: false });
         }
     },
 

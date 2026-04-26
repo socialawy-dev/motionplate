@@ -626,22 +626,26 @@ input, select, textarea { font: inherit; color: inherit; background: none; borde
     color: var(--text-dim);
 }
 
-.landing-page__card--new {
+.landing-page__card--new,
+.landing-page__card--example {
     border-style: dashed;
     background: transparent;
 }
 
-.landing-page__card--new:hover {
+.landing-page__card--new:hover,
+.landing-page__card--example:hover {
     background: var(--surface);
 }
 
-.landing-page__card--new .landing-page__card-thumb {
+.landing-page__card--new .landing-page__card-thumb,
+.landing-page__card--example .landing-page__card-thumb {
     background: transparent;
     font-size: 3rem;
     color: var(--text-dim);
 }
 
-.landing-page__card--new .landing-page__card-info h3 {
+.landing-page__card--new .landing-page__card-info h3,
+.landing-page__card--example .landing-page__card-info h3 {
     color: var(--text-dim);
     text-align: center;
 }
