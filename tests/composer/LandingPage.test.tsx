@@ -173,4 +173,20 @@ describe('LandingPage', () => {
 
         root.unmount();
     });
+
+    it('calls loadExample when Prologue Example card is clicked', async () => {
+        const mockLoadExample = vi.fn();
+        useProjectStore.setState({ loadExample: mockLoadExample });
+
+        const root = createRoot(container);
+        root.render(<LandingPage />);
+        await new Promise(r => setTimeout(r, 0));
+
+        const prologueCard = document.querySelector('[data-testid="example-prologue-card"]') as HTMLDivElement;
+        prologueCard.click();
+
+        expect(mockLoadExample).toHaveBeenCalledWith('prologue');
+
+        root.unmount();
+    });
 });

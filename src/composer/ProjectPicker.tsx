@@ -21,6 +21,7 @@ export default function ProjectPicker() {
     const loadProjectById = useProjectStore((s) => s.loadProjectById);
     const createNewProject = useProjectStore((s) => s.createNewProject);
     const deleteProjectById = useProjectStore((s) => s.deleteProjectById);
+    const loadExample = useProjectStore((s) => s.loadExample);
     const isLoading = useProjectStore((s) => s.isLoading);
 
     // Refresh list when dropdown opens
@@ -94,6 +95,30 @@ export default function ProjectPicker() {
                         <div className="project-picker__loading">Loading…</div>
                     )}
 
+                    <div className="project-picker__header" style={{ marginTop: '0.5rem', borderTop: '1px solid var(--surface-3)', paddingTop: '0.5rem' }}>
+                        <span>Examples</span>
+                    </div>
+                    <div className="project-picker__list">
+                        <div
+                            className="project-picker__item"
+                            onClick={() => {
+                                loadExample('prologue');
+                                setIsOpen(false);
+                            }}
+                            role="menuitem"
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { loadExample('prologue'); setIsOpen(false); } }}
+                        >
+                            <div className="project-picker__item-info">
+                                <span className="project-picker__item-title">Prologue Example</span>
+                                <span className="project-picker__item-meta">22 plates · Golden test</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="project-picker__header" style={{ marginTop: '0.5rem', borderTop: '1px solid var(--surface-3)', paddingTop: '0.5rem' }}>
+                        <span>Recent Projects</span>
+                    </div>
                     <div className="project-picker__list">
                         {recentProjects.length === 0 && !isLoading && (
                             <div className="project-picker__empty">No saved projects yet</div>
