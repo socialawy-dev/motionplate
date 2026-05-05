@@ -8,6 +8,7 @@ export default function LandingPage() {
     const loadProjectById = useProjectStore((s) => s.loadProjectById);
     const createNewProject = useProjectStore((s) => s.createNewProject);
     const clearRecentProjects = useProjectStore((s) => s.clearRecentProjects);
+    const loadExample = useProjectStore((s) => s.loadExample);
 
     useEffect(() => {
         refreshProjectList();
@@ -24,6 +25,33 @@ export default function LandingPage() {
 
     return (
         <div className="landing-page">
+            <div className="landing-page__header">
+                <h2>Recent Projects</h2>
+                {recentProjects.length > 0 && (
+                    <button className="landing-page__clear-btn" onClick={handleClearAll} title="Permanently delete all projects">
+                        Clear all projects
+                    </button>
+                )}
+            </div>
+            <div className="landing-page__header" style={{ marginTop: '2rem' }}>
+                <h2>Examples</h2>
+            </div>
+            <div className="landing-page__grid" style={{ marginBottom: '2rem' }}>
+                <div
+                    className="landing-page__card"
+                    onClick={() => loadExample('prologue')}
+                    data-testid="example-prologue-card"
+                >
+                    <div className="landing-page__card-thumb">
+                        <div className="landing-page__card-placeholder" style={{ background: 'var(--brand-primary)', color: 'white' }}>🎬</div>
+                    </div>
+                    <div className="landing-page__card-info">
+                        <h3>Prologue</h3>
+                        <p>22 plates · Golden test</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="landing-page__header">
                 <h2>Recent Projects</h2>
                 {recentProjects.length > 0 && (
