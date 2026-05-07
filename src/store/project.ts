@@ -111,6 +111,7 @@ interface ProjectState {
     loadProjectById: (id: string) => Promise<{ migrated: boolean; fromVersion: string } | null>;
     createNewProject: () => void;
     initFromLastProject: () => Promise<void>;
+    loadExample: () => Promise<void>;
 
     // P5-11: project list
     recentProjects: ProjectMeta[];
@@ -399,6 +400,54 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             setLastProjectId(newId);
             get().refreshProjectList();
         });
+    },
+
+
+    loadExample: async () => {
+        set({ isLoading: true });
+        try {
+            const specRes = await fetch('/examples/prologue/sequence.json');
+            if (!specRes.ok) throw new Error('Failed to load example sequence spec');
+            const spec = await specRes.json();
+
+            const images = [];
+            for (let i = 1; i <= spec.plates.length; i++) {
+                const iStr = i.toString().padStart(2, '0');
+                const imgRes = await fetch(`/examples/prologue/plate-${iStr}.png`);
+                if (!imgRes.ok) throw new Error(`Failed to load example plate ${iStr}`);
+                const blob = await imgRes.blob();
+                const file = new File([blob], `plate-${iStr}.png`, { type: blob.type });
+                const url = URL.createObjectURL(file);
+
+                const img = new Image();
+                img.src = url;
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+
+                images.push({ file, url, img });
+            }
+
+            const newId = generateId();
+            const newState = {
+                projectId: newId,
+                spec,
+                images,
+                selectedPlateIdx: 0,
+                past: [],
+                future: [],
+            };
+
+            set({ ...newState, isLoading: false });
+
+            await dbSave(newId, spec, images.map(e => e.file));
+            await setLastProjectId(newId);
+            get().refreshProjectList();
+        } catch (err) {
+            console.error('[MotionPlate] Failed to load example:', err);
+            set({ isLoading: false });
+        }
     },
 
     initFromLastProject: async () => {

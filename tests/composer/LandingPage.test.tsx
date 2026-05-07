@@ -16,6 +16,7 @@ describe('LandingPage', () => {
             loadProjectById: vi.fn(),
             createNewProject: vi.fn(),
             clearRecentProjects: vi.fn(),
+            loadExample: vi.fn(),
         });
     });
 
@@ -170,6 +171,22 @@ describe('LandingPage', () => {
         newCard.click();
 
         expect(mockCreate).toHaveBeenCalled();
+
+        root.unmount();
+    });
+
+    it('calls loadExample when Load Example card is clicked', async () => {
+        const mockLoadExample = vi.fn();
+        useProjectStore.setState({ loadExample: mockLoadExample });
+
+        const root = createRoot(container);
+        root.render(<LandingPage />);
+        await new Promise(r => setTimeout(r, 0));
+
+        const exampleCard = document.querySelector('[data-testid="load-example-card"]') as HTMLDivElement;
+        exampleCard.click();
+
+        expect(mockLoadExample).toHaveBeenCalled();
 
         root.unmount();
     });

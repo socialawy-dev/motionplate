@@ -22,6 +22,7 @@ export default function ProjectPicker() {
     const createNewProject = useProjectStore((s) => s.createNewProject);
     const deleteProjectById = useProjectStore((s) => s.deleteProjectById);
     const isLoading = useProjectStore((s) => s.isLoading);
+    const loadExample = useProjectStore((s) => s.loadExample);
 
     // Refresh list when dropdown opens
     useEffect(() => {
@@ -87,6 +88,13 @@ export default function ProjectPicker() {
                             aria-label="Create new project"
                         >
                             + New
+                        </button>
+                        <button
+                            className="project-picker__example-btn"
+                            onClick={() => { loadExample(); setIsOpen(false); }}
+                            aria-label="Load Example"
+                        >
+                            Load Example
                         </button>
                     </div>
 

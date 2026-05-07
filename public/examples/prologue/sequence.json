@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "title": "Prologue Golden Test",
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "schemaVersion": "1.1.0"
+  },
+  "plates": [
+    {
+      "id": "plate_01",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "wipeLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 01",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_02",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "wipeDown",
+      "transitionDuration": 1,
+      "text": "Prologue 02",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_03",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "slideLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 03",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_04",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "zoomThrough",
+      "transitionDuration": 1,
+      "text": "Prologue 04",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_05",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1,
+      "text": "Prologue 05",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_06",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 1,
+      "text": "Prologue 06",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_07",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "lightBleed",
+      "transitionDuration": 1,
+      "text": "Prologue 07",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_08",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "cut",
+      "transitionDuration": 1,
+      "text": "Prologue 08",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_09",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1,
+      "text": "Prologue 09",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_10",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "wipeLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 10",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_11",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "wipeDown",
+      "transitionDuration": 1,
+      "text": "Prologue 11",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_12",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "slideLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 12",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_13",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "zoomThrough",
+      "transitionDuration": 1,
+      "text": "Prologue 13",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_14",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "fadeThroughBlack",
+      "transitionDuration": 1,
+      "text": "Prologue 14",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_15",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "fadeThroughWhite",
+      "transitionDuration": 1,
+      "text": "Prologue 15",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_16",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "lightBleed",
+      "transitionDuration": 1,
+      "text": "Prologue 16",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_17",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "cut",
+      "transitionDuration": 1,
+      "text": "Prologue 17",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_18",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "crossfade",
+      "transitionDuration": 1,
+      "text": "Prologue 18",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_19",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "wipeLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 19",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_20",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "wipeDown",
+      "transitionDuration": 1,
+      "text": "Prologue 20",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_21",
+      "duration": 4,
+      "effect": "pulse",
+      "effectConfig": {},
+      "transition": "slideLeft",
+      "transitionDuration": 1,
+      "text": "Prologue 21",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    },
+    {
+      "id": "plate_22",
+      "duration": 4,
+      "effect": "kenBurns",
+      "effectConfig": {},
+      "transition": "zoomThrough",
+      "transitionDuration": 1,
+      "text": "Prologue 22",
+      "textConfig": {
+        "position": "center",
+        "color": "#ffffff"
+      }
+    }
+  ]
+}
