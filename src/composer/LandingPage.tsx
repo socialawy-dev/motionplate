@@ -8,6 +8,7 @@ export default function LandingPage() {
     const loadProjectById = useProjectStore((s) => s.loadProjectById);
     const createNewProject = useProjectStore((s) => s.createNewProject);
     const clearRecentProjects = useProjectStore((s) => s.clearRecentProjects);
+    const loadExampleProject = useProjectStore((s) => s.loadExampleProject);
 
     useEffect(() => {
         refreshProjectList();
@@ -43,6 +44,19 @@ export default function LandingPage() {
                     </div>
                     <div className="landing-page__card-info">
                         <h3>New Project</h3>
+                    </div>
+                </div>
+                <div
+                    className="landing-page__card landing-page__card--example"
+                    onClick={() => loadExampleProject('prologue')}
+                    data-testid="example-project-card"
+                >
+                    <div className="landing-page__card-thumb">
+                        <span style={{ fontSize: '2rem' }}>🖼️</span>
+                    </div>
+                    <div className="landing-page__card-info">
+                        <h3>Load Prologue Example</h3>
+                        <p>22 plates · Reference sequence</p>
                     </div>
                 </div>
                 {displayProjects.map((p) => (

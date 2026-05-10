@@ -111,6 +111,7 @@ interface ProjectState {
     loadProjectById: (id: string) => Promise<{ migrated: boolean; fromVersion: string } | null>;
     createNewProject: () => void;
     initFromLastProject: () => Promise<void>;
+    loadExampleProject: (exampleName: string) => Promise<void>;
 
     // P5-11: project list
     recentProjects: ProjectMeta[];
@@ -425,6 +426,70 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             }
         } catch (err) {
             console.error('[MotionPlate] Init from last project failed:', err);
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
+    loadExampleProject: async (exampleName: string) => {
+        set({ isLoading: true });
+        try {
+            const basePath = `/examples/${exampleName}`;
+            const res = await fetch(`${basePath}/sequence.json`);
+            if (!res.ok) throw new Error(`Failed to load ${exampleName} sequence.json`);
+            const spec = (await res.json()) as Sequence;
+
+            const imageEntries: ImageEntry[] = [];
+            for (let i = 0; i < spec.plates.length; i++) {
+                const plate = spec.plates[i];
+                // Try to infer image name from id or fallback to sequential plate-XX.png
+                let imgName = `${plate.id}.png`;
+                if (plate.id.startsWith('plate-') || plate.id.startsWith('plate_')) {
+                    imgName = `${plate.id.replace('_', '-')}.png`;
+                } else {
+                    const numStr = (i + 1).toString().padStart(2, '0');
+                    imgName = `plate-${numStr}.png`;
+                }
+
+                const imgRes = await fetch(`${basePath}/${imgName}`);
+                if (!imgRes.ok) throw new Error(`Failed to load ${imgName}`);
+                const blob = await imgRes.blob();
+                const file = new File([blob], imgName, { type: blob.type || 'image/png' });
+                const url = URL.createObjectURL(blob);
+
+                await new Promise<void>((resolve) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        imageEntries.push({ file, url, img });
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        console.warn(`[MotionPlate] Failed to decode image: ${imgName}`);
+                        // Still resolve to allow project to load even if some images are missing/broken
+                        resolve();
+                    };
+                    img.src = url;
+                });
+            }
+
+            const newId = generateId();
+            const newState = {
+                projectId: newId,
+                spec,
+                images: imageEntries,
+                selectedPlateIdx: 0,
+                past: [],
+                future: [],
+            };
+            set(newState);
+
+            // Auto-save the example so it shows in the recent projects list
+            const files = imageEntries.map(e => e.file);
+            await dbSave(newId, spec, files);
+            await setLastProjectId(newId);
+            get().refreshProjectList();
+        } catch (err) {
+            console.error('[MotionPlate] Failed to load example:', err);
         } finally {
             set({ isLoading: false });
         }
