@@ -22,8 +22,29 @@ export default function LandingPage() {
         }
     };
 
+    const loadExample = useProjectStore((s) => s.loadExample);
+
     return (
         <div className="landing-page">
+            <div className="landing-page__header">
+                <h2>Examples</h2>
+            </div>
+            <div className="landing-page__grid" style={{ marginBottom: '2rem' }}>
+                <div
+                    className="landing-page__card landing-page__card--example"
+                    onClick={() => loadExample('prologue')}
+                    data-testid="load-example-prologue"
+                >
+                    <div className="landing-page__card-thumb">
+                        <span style={{ fontSize: '2rem' }}>📚</span>
+                    </div>
+                    <div className="landing-page__card-info">
+                        <h3>Prologue Example</h3>
+                        <p>22 plate sequence</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="landing-page__header">
                 <h2>Recent Projects</h2>
                 {recentProjects.length > 0 && (
