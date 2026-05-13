@@ -117,6 +117,9 @@ interface ProjectState {
     refreshProjectList: () => Promise<void>;
     deleteProjectById: (id: string) => Promise<void>;
     clearRecentProjects: () => Promise<void>;
+
+    // P6-01: Load Example
+    loadExample: (exampleId: string) => Promise<void>;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -399,6 +402,54 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
             setLastProjectId(newId);
             get().refreshProjectList();
         });
+    },
+
+
+    loadExample: async (exampleId: string) => {
+        set({ isLoading: true });
+        try {
+            // Fetch sequence.json
+            const specRes = await fetch(`/examples/${exampleId}/sequence.json`);
+            if (!specRes.ok) throw new Error('Failed to load example sequence spec');
+            const spec: Sequence = await specRes.json();
+
+            // Fetch images
+            const images: ImageEntry[] = [];
+            for (const plate of spec.plates) {
+                const imgRes = await fetch(`/examples/${exampleId}/${plate.id}.png`);
+                if (!imgRes.ok) throw new Error(`Failed to load example image ${plate.id}.png`);
+                const blob = await imgRes.blob();
+                const file = new File([blob], `${plate.id}.png`, { type: blob.type });
+                const url = URL.createObjectURL(file);
+
+                const img = new Image();
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = url;
+                });
+
+                images.push({ file, url, img });
+            }
+
+            const newId = generateId();
+            const newState = {
+                projectId: newId,
+                spec: { ...spec, meta: { ...spec.meta, title: spec.meta.title } },
+                images,
+                selectedPlateIdx: 0,
+                past: [],
+                future: [],
+                isLoading: false,
+            };
+
+            set(newState);
+            debouncedSave(get() as ProjectState);
+            await setLastProjectId(newId);
+        } catch (err) {
+            console.error('[MotionPlate] Load example failed:', err);
+            set({ isLoading: false });
+        }
     },
 
     initFromLastProject: async () => {
